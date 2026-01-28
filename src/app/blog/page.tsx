@@ -63,7 +63,7 @@ export default function BlogPage() {
       <Header />
       <main className="flex-1 mt-16">
         {/* Featured Story */}
-        <section className="max-w-[1200px] mx-auto px-6 py-10">
+        <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-10">
           <div className="flex flex-col gap-6 md:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
             <div
               className="w-full md:w-3/5 bg-center bg-no-repeat aspect-video bg-cover"
@@ -97,7 +97,7 @@ export default function BlogPage() {
         </section>
 
         {/* Categories */}
-        <section className="max-w-[1200px] mx-auto px-6 py-4">
+        <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-4">
           <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
             {BLOG_CATEGORIES.map((category, index) => (
               <div
@@ -115,7 +115,7 @@ export default function BlogPage() {
         </section>
 
         {/* Article Grid */}
-        <section className="max-w-[1200px] mx-auto px-6 py-8">
+        <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {ARTICLES.map((article, index) => (
               <ArticleCard key={index} {...article} />
@@ -124,8 +124,8 @@ export default function BlogPage() {
         </section>
 
         {/* Newsletter CTA */}
-        <section className="max-w-[1200px] mx-auto px-6 py-12">
-          <div className="bg-primary/5 dark:bg-primary/10 rounded-2xl p-8 md:p-12 text-center border border-primary/20">
+        <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-12">
+          <div className="bg-primary/5 dark:bg-primary/10 rounded-2xl p-6 md:p-12 text-center border border-primary/20">
             <h2 className="text-[#111418] dark:text-white text-2xl md:text-3xl font-bold mb-4">Never miss a story.</h2>
             <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-lg mx-auto">
               Subscribe to our newsletter for the latest dating advice, success stories, and platform updates delivered straight to your inbox.
@@ -147,7 +147,7 @@ export default function BlogPage() {
         </section>
 
         {/* Pagination */}
-        <section className="max-w-[1200px] mx-auto px-6 py-12">
+        <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-12">
           <div className="flex items-center justify-center gap-2">
             <a className="flex size-10 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:border-primary transition-colors" href="#">
               <ChevronLeft className="w-5 h-5 text-[#111418] dark:text-slate-300" />

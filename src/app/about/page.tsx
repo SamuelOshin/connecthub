@@ -52,7 +52,7 @@ export default function AboutPage() {
       <Header />
       <main className="flex-1 mt-16">
         {/* Mission Section */}
-        <section className="px-4 lg:px-40 flex justify-center py-12 lg:py-20">
+        <section className="px-4 md:px-10 lg:px-40 flex justify-center py-12 lg:py-20">
           <div className="flex flex-col gap-8 lg:flex-row items-center max-w-[1200px] w-full">
             <div className="w-full lg:w-1/2 flex flex-col gap-6 lg:gap-8">
               <div className="flex flex-col gap-4 text-left">
@@ -80,7 +80,7 @@ export default function AboutPage() {
         </section>
 
         {/* Core Values Section */}
-        <section className="bg-white dark:bg-slate-900/50 py-20 px-4 lg:px-40">
+        <section className="bg-white dark:bg-slate-900/50 py-16 md:py-20 px-4 md:px-10 lg:px-40">
           <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
             <div className="flex flex-col gap-4 text-center items-center">
               <h2 className="text-[#111418] dark:text-white tracking-tight text-3xl font-bold leading-tight sm:text-4xl">
@@ -99,7 +99,7 @@ export default function AboutPage() {
         </section>
 
         {/* Story Section */}
-        <section className="px-4 lg:px-40 py-20 bg-background-light dark:bg-background-dark">
+        <section className="px-4 md:px-10 lg:px-40 py-16 md:py-20 bg-background-light dark:bg-background-dark">
           <div className="max-w-[1200px] mx-auto flex flex-col items-center">
             <div className="w-full max-w-[800px] text-center mb-12">
               <h2 className="text-[#111418] dark:text-white text-3xl font-bold mb-6">The Story Behind ConnectHub</h2>
@@ -117,7 +117,7 @@ export default function AboutPage() {
         </section>
 
         {/* Team Section */}
-        <section className="px-4 lg:px-40 py-20 bg-white dark:bg-slate-900/50">
+        <section className="px-4 md:px-10 lg:px-40 py-16 md:py-20 bg-white dark:bg-slate-900/50">
           <div className="max-w-[1200px] mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-[#111418] dark:text-white text-3xl font-bold mb-4">Meet the Visionaries</h2>
@@ -132,20 +132,20 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="px-4 lg:px-40 py-24">
-          <div className="max-w-[1200px] mx-auto rounded-xl bg-primary p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl">
+        <section className="px-4 md:px-10 lg:px-40 py-16 md:py-24">
+          <div className="max-w-[1200px] mx-auto rounded-xl bg-primary p-8 md:p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 -mr-20 -mt-20 size-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 -ml-20 -mb-20 size-64 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
             <div className="relative z-10">
-              <h2 className="text-4xl lg:text-5xl font-black mb-6">Ready to find your connection?</h2>
-              <p className="text-white/80 text-lg mb-10 max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6">Ready to find your connection?</h2>
+              <p className="text-white/80 text-base md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto">
                 Join thousands of people who have already transitioned from digital chatting to meaningful, real-life relationships.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-primary font-bold px-10 py-4 rounded-full hover:bg-slate-100 transition-colors shadow-xl">
+                <button className="bg-white text-primary font-bold px-8 py-3 md:px-10 md:py-4 rounded-full hover:bg-slate-100 transition-colors shadow-xl text-sm md:text-base">
                   Download Now
                 </button>
-                <button className="bg-primary/20 border border-white/30 backdrop-blur-sm text-white font-bold px-10 py-4 rounded-full hover:bg-white/10 transition-colors">
+                <button className="bg-primary/20 border border-white/30 backdrop-blur-sm text-white font-bold px-8 py-3 md:px-10 md:py-4 rounded-full hover:bg-white/10 transition-colors text-sm md:text-base">
                   Learn More
                 </button>
               </div>

@@ -58,7 +58,7 @@ export default function HelpPage() {
           {/* Search Hero */}
           <div className="p-4 md:p-10 w-full">
             <div
-              className="flex min-h-[380px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-xl items-center justify-center p-8 text-center"
+              className="flex min-h-[320px] md:min-h-[380px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-xl items-center justify-center p-6 md:p-8 text-center"
               style={{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuARN12_jeX0OkcM3K6Up8L_JLFgTXYHwLi-b_B3y9RPrRZBRk_CI53nAt7SDQEah3h8Pbl86shQarTrUIdSspWI7xvcj9L2NenZejrEZFe7qmdpaGe2hWKGA8tRmj7xLBZMOky1YhgZUCa80o7Nkz0fkCjAuv90TE7We3pL7XKKnNFwl2Op-hf8ie8_Mz0m7WtfnYbhH1sG1C9Y5cb5kKgKZcNwR3Vh8s-L_4xdDT5NViIIglW8q_XjawTB9fvS5nSsVAfvfYoV_gdV")' }}
             >
               <div className="flex flex-col gap-3">
@@ -95,7 +95,7 @@ export default function HelpPage() {
           </div>
 
           {/* Breadcrumbs */}
-          <div className="flex flex-wrap gap-2 px-10 py-2">
+          <div className="flex flex-wrap gap-2 px-6 md:px-10 py-2">
             <Link href="/" className="text-[#5f758c] dark:text-gray-400 text-sm font-medium leading-normal flex items-center gap-1 hover:text-primary transition-colors">
               <Home className="w-4 h-4" /> Home
             </Link>
@@ -114,7 +114,7 @@ export default function HelpPage() {
           </div>
 
           {/* FAQ Section */}
-          <div className="px-10 py-10 w-full max-w-4xl mx-auto">
+          <div className="px-4 md:px-10 py-10 w-full max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-[#111418] dark:text-white text-2xl font-bold font-display">Frequently Asked Questions</h2>
               <Link href="#" className="text-primary font-semibold text-sm hover:underline">View All</Link>
@@ -142,12 +142,12 @@ export default function HelpPage() {
           </div>
 
           {/* Contact Support CTA */}
-          <div className="m-10 p-8 rounded-2xl bg-primary/5 dark:bg-primary/10 border-2 border-dashed border-primary/30 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="mx-4 my-8 md:m-10 p-6 md:p-8 rounded-2xl bg-primary/5 dark:bg-primary/10 border-2 border-dashed border-primary/30 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col gap-2 text-center md:text-left">
               <h2 className="text-[#111418] dark:text-white text-2xl font-bold font-display">Still need help?</h2>
               <p className="text-[#5f758c] dark:text-gray-400">Can't find what you're looking for? Our support team is here to help 24/7.</p>
             </div>
-            <Button size="lg" className="rounded-full shadow-lg hover:scale-105 transition-transform">
+            <Button size="lg" className="rounded-full shadow-lg hover:scale-105 transition-transform w-full md:w-auto">
               Contact Support
             </Button>
           </div>

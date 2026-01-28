@@ -1,11 +1,25 @@
+"use client";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { TOCSidebar } from "@/components/features/privacy/TOCSidebar";
 import { PrivacyContent } from "@/components/features/privacy/PrivacyContent";
 import { ChevronRight, Download } from "lucide-react";
 import Link from "next/link";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
+
+const SECTION_IDS = [
+  "data-we-collect",
+  "how-we-use",
+  "sharing",
+  "cookies",
+  "rights",
+  "security"
+];
 
 export default function PrivacyPage() {
+  const activeSection = useScrollSpy(SECTION_IDS);
+
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark text-[#101418] dark:text-white transition-colors duration-200">
       <Header />
@@ -33,7 +47,7 @@ export default function PrivacyPage() {
 
         <div className="flex flex-col lg:flex-row gap-12 relative">
             <aside className="w-full lg:w-72 flex-shrink-0 hidden lg:block">
-                 <TOCSidebar />
+                 <TOCSidebar activeSection={activeSection} />
             </aside>
             <PrivacyContent />
         </div>

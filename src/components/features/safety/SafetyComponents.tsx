@@ -18,16 +18,13 @@ export function SafetyHero() {
         </div>
         <div className="w-full max-w-[540px] mt-4">
           <div className="flex bg-white rounded-full p-2 shadow-xl ring-1 ring-black/5">
-            <div className="flex items-center pl-4 text-slate-400">
-              <Search className="w-5 h-5" />
-            </div>
             <input
-              className="w-full border-0 focus:ring-0 text-slate-800 placeholder:text-slate-400 text-base px-3 outline-none"
+              className="flex-1 min-w-0 border-0 focus:ring-0 text-slate-800 placeholder:text-slate-400 text-base px-6 outline-none bg-transparent"
               placeholder="How can we help you stay safe?"
               type="text"
             />
-            <Button variant="primary" className="rounded-full px-8 py-3 h-auto">
-                Search
+            <Button variant="primary" className="rounded-full w-12 h-12 p-0 flex-shrink-0 flex items-center justify-center">
+                <Search className="w-5 h-5" />
             </Button>
           </div>
         </div>

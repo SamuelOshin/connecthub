@@ -1,14 +1,18 @@
 import { Search, Database, BarChart, Share2, Cookie, Shield, Lock } from "lucide-react";
 import Link from "next/link";
 
-export function TOCSidebar() {
+interface TOCSidebarProps {
+  activeSection?: string;
+}
+
+export function TOCSidebar({ activeSection }: TOCSidebarProps) {
   const links = [
-    { href: "#data-we-collect", icon: Database, label: "1. Data We Collect", active: true },
-    { href: "#how-we-use", icon: BarChart, label: "2. How We Use Data" },
-    { href: "#sharing", icon: Share2, label: "3. Sharing Information" },
-    { href: "#cookies", icon: Cookie, label: "4. Cookies & Tracking" },
-    { href: "#rights", icon: Shield, label: "5. Your Privacy Rights" },
-    { href: "#security", icon: Lock, label: "6. Data Security" },
+    { href: "#data-we-collect", icon: Database, label: "1. Data We Collect", id: "data-we-collect" },
+    { href: "#how-we-use", icon: BarChart, label: "2. How We Use Data", id: "how-we-use" },
+    { href: "#sharing", icon: Share2, label: "3. Sharing Information", id: "sharing" },
+    { href: "#cookies", icon: Cookie, label: "4. Cookies & Tracking", id: "cookies" },
+    { href: "#rights", icon: Shield, label: "5. Your Privacy Rights", id: "rights" },
+    { href: "#security", icon: Lock, label: "6. Data Security", id: "security" },
   ];
 
   return (
@@ -26,22 +30,25 @@ export function TOCSidebar() {
           />
         </div>
         <nav className="flex flex-col gap-1">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                link.active
-                  ? "bg-primary/10 text-primary"
-                  : "hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#101418] dark:hover:text-white"
-              }`}
-            >
-              <link.icon className="w-5 h-5" />
-              <span className={`text-sm ${link.active ? "font-bold" : "font-medium"}`}>
-                {link.label}
-              </span>
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  isActive
+                    ? "bg-primary/10 text-primary"
+                    : "hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#101418] dark:hover:text-white"
+                }`}
+              >
+                <link.icon className="w-5 h-5" />
+                <span className={`text-sm ${isActive ? "font-bold" : "font-medium"}`}>
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
         </nav>
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
           <button className="w-full py-2.5 bg-[#101418] dark:bg-white hover:opacity-90 transition-opacity text-white dark:text-[#101418] rounded-lg text-sm font-bold shadow-lg">

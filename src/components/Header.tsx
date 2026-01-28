@@ -41,8 +41,12 @@ export function Header() {
             <button className="p-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
               <Bell className="w-5 h-5" />
             </button>
-            <Button variant="outline" size="sm">Log In</Button>
-            <Button variant="primary" size="sm">Join Now</Button>
+            <Link href="/login">
+              <Button variant="outline" size="sm">Log In</Button>
+            </Link>
+            <Link href="/signup">
+              <Button variant="primary" size="sm">Join Now</Button>
+            </Link>
           </div>
         </div>
 
@@ -72,8 +76,12 @@ export function Header() {
             ))}
           </nav>
           <div className="flex flex-col gap-3 mt-2">
-            <Button variant="outline" className="w-full justify-center">Log In</Button>
-            <Button variant="primary" className="w-full justify-center">Join Now</Button>
+            <Link href="/login" className="w-full">
+              <Button variant="outline" className="w-full justify-center">Log In</Button>
+            </Link>
+            <Link href="/signup" className="w-full">
+              <Button variant="primary" className="w-full justify-center">Join Now</Button>
+            </Link>
           </div>
         </div>
       )}

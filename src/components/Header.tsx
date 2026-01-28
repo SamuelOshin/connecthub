@@ -4,7 +4,7 @@ import { Button } from "./Button";
 
 export function Header() {
   return (
-    <header className="w-full px-4 sm:px-10 py-5 z-20 absolute top-0 left-0">
+    <header className="w-full px-4 sm:px-10 py-4 z-50 fixed top-0 left-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
       <div className="mx-auto max-w-7xl flex items-center justify-between">
         <div className="flex items-center gap-2 text-primary">
           <Users className="w-9 h-9" />

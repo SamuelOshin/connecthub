@@ -26,8 +26,13 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <h4 className="text-white font-bold">Company</h4>
             <ul className="flex flex-col gap-2 text-sm">
-              {["About Us", "Careers", "Press", "Contact"].map(item => (
-                <li key={item}><Link href="#" className="hover:text-white transition-colors">{item}</Link></li>
+              {[
+                { label: "About Us", href: "/about" },
+                { label: "Careers", href: "#" },
+                { label: "Press", href: "#" },
+                { label: "Contact", href: "#" },
+              ].map(item => (
+                <li key={item.label}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -44,8 +49,13 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <h4 className="text-white font-bold">Resources</h4>
              <ul className="flex flex-col gap-2 text-sm">
-              {["Safety Tips", "Community Guidelines", "Success Stories", "Help Center"].map(item => (
-                <li key={item}><Link href={item === "Safety Tips" ? "/safety" : "#"} className="hover:text-white transition-colors">{item}</Link></li>
+              {[
+                { label: "Safety Tips", href: "/safety" },
+                { label: "Community Guidelines", href: "#" },
+                { label: "Success Stories", href: "/blog" },
+                { label: "Help Center", href: "/help" },
+              ].map(item => (
+                <li key={item.label}><Link href={item.href} className="hover:text-white transition-colors">{item.label}</Link></li>
               ))}
             </ul>
           </div>

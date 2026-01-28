@@ -5,6 +5,17 @@ export function useScrollSpy(sectionIds: string[], offset: number = 100) {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Check if we're at the bottom of the page
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50 // 50px buffer
+      ) {
+        if (sectionIds.length > 0) {
+          setActiveSection(sectionIds[sectionIds.length - 1]);
+          return;
+        }
+      }
+
       let currentSection = "";
 
       // Check each section's position
@@ -12,31 +23,31 @@ export function useScrollSpy(sectionIds: string[], offset: number = 100) {
         const element = document.getElementById(id);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // If the top of the section is within the viewport (with some offset)
-          // or we are near the bottom of the page
+          // If the top of the section is within the viewport (above the offset line)
+          // The loop continues, so 'currentSection' will eventually capture the *last* section
+          // that satisfies this condition (which is the one currently closest to the top but still started above the offset).
           if (rect.top <= offset) {
             currentSection = id;
           }
         }
       }
 
-      // If we're at the very top, maybe reset or set to first?
-      // But typically we want the last one that passed the threshold.
-
+      // If we found a section that crossed the line, set it.
       if (currentSection) {
         setActiveSection(currentSection);
-      } else if (sectionIds.length > 0) {
-        // Default to first if nothing triggered (e.g. at top)
+      } else if (sectionIds.length > 0 && !activeSection) {
+        // Only default to first if no section is active yet (initial load at top)
+        // If we scroll up past the first one, it might be better to keep first one or clear.
+        // Usually keeping the first one is safe for "Introduction" content.
         setActiveSection(sectionIds[0]);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Trigger once on mount
-    handleScroll();
+    handleScroll(); // Trigger once on mount
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [sectionIds, offset]);
+  }, [sectionIds, offset, activeSection]);
 
   return activeSection;
 }

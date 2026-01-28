@@ -18,7 +18,10 @@ const SECTION_IDS = [
 ];
 
 export default function PrivacyPage() {
-  const activeSection = useScrollSpy(SECTION_IDS);
+  // Use a larger offset (250px) to eagerly activate sections as they enter the reading zone,
+  // fixing the issue where the user feels "in" a section before it hits the top.
+  // The scroll-margin-top is 112px, so the offset must be > 112px for click-to-scroll to highlight correctly.
+  const activeSection = useScrollSpy(SECTION_IDS, 250);
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark text-[#101418] dark:text-white transition-colors duration-200">

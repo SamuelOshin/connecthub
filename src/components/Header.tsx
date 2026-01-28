@@ -11,7 +11,7 @@ export function Header() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const NAV_LINKS = [
-    { label: "Safety", href: "/help" },
+    { label: "Safety", href: "/safety" },
     { label: "Stories", href: "/blog" },
     { label: "Help Center", href: "/help" },
   ];

@@ -12,13 +12,17 @@ export function Header() {
         </div>
         <div className="flex items-center gap-4">
           <nav className="hidden md:flex items-center gap-8 mr-4">
-            {["Safety", "Stories", "Help Center"].map((item) => (
+            {[
+              { label: "Safety", href: "/help" },
+              { label: "Stories", href: "/blog" },
+              { label: "Help Center", href: "/help" },
+            ].map((item) => (
               <Link
-                key={item}
-                href="#"
+                key={item.label}
+                href={item.href}
                 className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
               >
-                {item}
+                {item.label}
               </Link>
             ))}
           </nav>

@@ -41,7 +41,7 @@ export function Footer() {
             <h4 className="text-white font-bold">Legal</h4>
             <ul className="flex flex-col gap-2 text-sm">
               {["Privacy Policy", "Terms of Service", "Cookie Policy", "Security"].map(item => (
-                <li key={item}><Link href="#" className="hover:text-white transition-colors">{item}</Link></li>
+                <li key={item}><Link href={item === "Privacy Policy" ? "/privacy" : "#"} className="hover:text-white transition-colors">{item}</Link></li>
               ))}
             </ul>
           </div>
@@ -50,7 +50,7 @@ export function Footer() {
             <h4 className="text-white font-bold">Resources</h4>
              <ul className="flex flex-col gap-2 text-sm">
               {[
-                { label: "Safety Tips", href: "/help" },
+                { label: "Safety Tips", href: "/safety" },
                 { label: "Community Guidelines", href: "#" },
                 { label: "Success Stories", href: "/blog" },
                 { label: "Help Center", href: "/help" },

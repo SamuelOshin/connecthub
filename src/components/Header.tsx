@@ -15,7 +15,7 @@ export function Header() {
             {["Safety", "Stories", "Help Center"].map((item) => (
               <Link
                 key={item}
-                href="#"
+                href={item === "Safety" ? "/safety" : "#"}
                 className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
               >
                 {item}

@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { CoreValueCard } from "@/components/features/about/CoreValueCard";
 import { TeamMemberCard } from "@/components/features/about/TeamMemberCard";
 import { ShieldCheck, Lock, Heart } from "lucide-react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 const CORE_VALUES = [
   {

@@ -2,7 +2,7 @@
 
 import { Users, Bell, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./Button";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export function Header() {
@@ -41,8 +41,18 @@ export function Header() {
             <button className="p-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
               <Bell className="w-5 h-5" />
             </button>
-            <Button variant="outline" size="sm">Log In</Button>
-            <Button variant="primary" size="sm">Join Now</Button>
+            <Link href="/login">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 backdrop-blur-sm border-primary/20 text-primary hover:bg-primary/5 hover:text-primary dark:bg-transparent dark:text-white dark:border-white/20 dark:hover:bg-white/10"
+              >
+                Log In
+              </Button>
+            </Link>
+            <Link href="/sign-up">
+              <Button variant="default" size="sm">Join Now</Button>
+            </Link>
           </div>
         </div>
 
@@ -72,8 +82,12 @@ export function Header() {
             ))}
           </nav>
           <div className="flex flex-col gap-3 mt-2">
-            <Button variant="outline" className="w-full justify-center">Log In</Button>
-            <Button variant="primary" className="w-full justify-center">Join Now</Button>
+            <Link href="/login" className="w-full">
+              <Button variant="outline" className="w-full justify-center">Log In</Button>
+            </Link>
+            <Link href="/sign-up" className="w-full">
+              <Button variant="default" className="w-full justify-center">Join Now</Button>
+            </Link>
           </div>
         </div>
       )}

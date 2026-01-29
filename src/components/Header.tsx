@@ -42,7 +42,13 @@ export function Header() {
               <Bell className="w-5 h-5" />
             </button>
             <Link href="/login">
-              <Button variant="outline" size="sm">Log In</Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 backdrop-blur-sm border-primary/20 text-primary hover:bg-primary/5 hover:text-primary dark:bg-transparent dark:text-white dark:border-white/20 dark:hover:bg-white/10"
+              >
+                Log In
+              </Button>
             </Link>
             <Link href="/sign-up">
               <Button variant="default" size="sm">Join Now</Button>

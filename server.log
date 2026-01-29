@@ -304,3 +304,9 @@ Caused by:
     0: Unable to open static sorted file 00000435.sst
     1: No such file or directory (os error 2)
 Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+(node:35776) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///app/tailwind.config.ts?id=1769690237148 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /app/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)

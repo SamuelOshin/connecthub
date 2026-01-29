@@ -33,7 +33,13 @@ export function Hero() {
             <div className="w-full max-w-md flex flex-col gap-5 mt-4">
               <div className="flex flex-col sm:flex-row gap-4 w-full">
                 <Button variant="default" size="lg" className="flex-1">Find Your Match</Button>
-                <Button variant="outline" size="lg">Learn More</Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-transparent dark:text-white dark:border-white/20 dark:hover:bg-white/10"
+                >
+                  Learn More
+                </Button>
               </div>
               <p className="text-sm text-slate-500 text-center lg:text-left">
                 Free to join. No credit card required.

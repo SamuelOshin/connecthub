@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { PartyPopper, Star, Heart, ArrowRight, Network } from "lucide-react";
 
 interface VerificationSuccessProps {

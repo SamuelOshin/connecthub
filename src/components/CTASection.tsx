@@ -1,4 +1,4 @@
-import { Button } from "./Button";
+import { Button } from "@/components/ui/button";
 
 export function CTASection() {
   return (

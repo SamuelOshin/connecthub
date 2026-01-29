@@ -2,7 +2,7 @@
 
 import { Users, Bell, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./Button";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export function Header() {
@@ -44,8 +44,8 @@ export function Header() {
             <Link href="/login">
               <Button variant="outline" size="sm">Log In</Button>
             </Link>
-            <Link href="/signup">
-              <Button variant="primary" size="sm">Join Now</Button>
+            <Link href="/sign-up">
+              <Button variant="default" size="sm">Join Now</Button>
             </Link>
           </div>
         </div>
@@ -79,8 +79,8 @@ export function Header() {
             <Link href="/login" className="w-full">
               <Button variant="outline" className="w-full justify-center">Log In</Button>
             </Link>
-            <Link href="/signup" className="w-full">
-              <Button variant="primary" className="w-full justify-center">Join Now</Button>
+            <Link href="/sign-up" className="w-full">
+              <Button variant="default" className="w-full justify-center">Join Now</Button>
             </Link>
           </div>
         </div>

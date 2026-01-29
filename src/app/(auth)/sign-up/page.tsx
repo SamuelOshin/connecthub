@@ -3,37 +3,42 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SocialButton } from "@/components/ui/social-button";
-import { Mail, Lock, Eye, ArrowRight, Activity } from "lucide-react";
+import { User, Mail, Lock, Eye, ArrowRight, Activity } from "lucide-react";
 
 const MOCK_DATA = {
   header: {
     title: "ConnectHub",
+    logoIcon: Activity // Using Activity as placeholder for 'hub' icon if needed, or stick to simple logic
   },
-  pageTitle: "Welcome Back",
-  pageSubtitle: "Please enter your details to sign in.",
+  pageTitle: "Create Account",
+  pageSubtitle: "Start your journey to finding love today.",
   tabs: {
     login: "Log In",
     signup: "Sign Up"
   },
   form: {
+    nameLabel: "Full Name",
+    namePlaceholder: "Enter your full name",
     emailLabel: "Email or Phone",
     emailPlaceholder: "Enter your email",
-    passwordLabel: "Password",
-    passwordPlaceholder: "Enter your password",
-    forgotPassword: "Forgot Password?",
-    submitButton: "Sign In"
+    passwordLabel: "Create Password",
+    passwordPlaceholder: "Create a strong password",
+    strengthText: "Strength:",
+    strengthValue: "Medium",
+    terms: "I agree to the Terms of Service and Privacy Policy.",
+    submitButton: "Sign Up"
   },
   social: {
-    text: "Or continue with"
+    text: "Or sign up with"
   },
   footer: {
-    text: "By clicking Sign In, you agree to our",
-    terms: "Terms of Service",
-    privacy: "Privacy Policy"
+    text: "Already have an account?",
+    linkText: "Log in",
+    linkHref: "/login"
   }
 };
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <AuthLayout>
       {/* Brand Header */}
@@ -59,24 +64,35 @@ export default function LoginPage() {
       {/* Tabs */}
       <div className="border-b border-[#dbe0e6] dark:border-gray-700 w-full mb-2">
         <div className="flex gap-8">
-          <div className="flex items-center justify-center border-b-[3px] border-primary text-[#111418] dark:text-white pb-3 pt-2 cursor-pointer transition-colors">
-            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.login}
-            </span>
-          </div>
           <Link
-            href="/sign-up"
+            href="/login"
             className="flex items-center justify-center border-b-[3px] border-transparent text-[#60758a] dark:text-gray-500 hover:text-[#111418] dark:hover:text-gray-300 pb-3 pt-2 cursor-pointer transition-colors"
           >
             <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.signup}
+              {MOCK_DATA.tabs.login}
             </span>
           </Link>
+          <div className="flex items-center justify-center border-b-[3px] border-primary text-[#111418] dark:text-white pb-3 pt-2 cursor-pointer transition-colors">
+            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
+              {MOCK_DATA.tabs.signup}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Form */}
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#111418] dark:text-white text-sm font-medium leading-normal">
+            {MOCK_DATA.form.nameLabel}
+          </label>
+          <Input
+            type="text"
+            placeholder={MOCK_DATA.form.namePlaceholder}
+            leftIcon={<User className="w-5 h-5" />}
+          />
+        </div>
+
         <div className="flex flex-col gap-1.5">
           <label className="text-[#111418] dark:text-white text-sm font-medium leading-normal">
             {MOCK_DATA.form.emailLabel}
@@ -105,12 +121,35 @@ export default function LoginPage() {
                 <Eye className="w-5 h-5" />
              </button>
           </div>
+
+          {/* Strength Meter */}
+          <div className="flex flex-col gap-1 mt-1">
+            <div className="flex gap-2 h-1.5 w-full">
+              <div className="flex-1 rounded-full bg-yellow-500"></div>
+              <div className="flex-1 rounded-full bg-yellow-500"></div>
+              <div className="flex-1 rounded-full bg-[#e5e7eb] dark:bg-gray-700"></div>
+              <div className="flex-1 rounded-full bg-[#e5e7eb] dark:bg-gray-700"></div>
+            </div>
+            <p className="text-xs text-[#60758a] dark:text-gray-500">
+              {MOCK_DATA.form.strengthText}{" "}
+              <span className="text-yellow-600 dark:text-yellow-500 font-medium">
+                {MOCK_DATA.form.strengthValue}
+              </span>
+            </p>
+          </div>
         </div>
 
-        <div className="flex justify-end">
-            <Link href="#" className="text-primary text-sm font-semibold hover:underline">
-                {MOCK_DATA.form.forgotPassword}
-            </Link>
+        <div className="flex items-start gap-3 py-1">
+            <div className="flex items-center h-5">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary bg-white dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                />
+            </div>
+            <label htmlFor="terms" className="text-sm text-[#60758a] dark:text-gray-400 leading-tight select-none">
+               I agree to the <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">Privacy Policy</Link>.
+            </label>
         </div>
 
         <Button className="w-full gap-2 text-base" size="lg">
@@ -120,7 +159,7 @@ export default function LoginPage() {
       </form>
 
       {/* Divider */}
-      <div className="relative flex py-2 items-center">
+      <div className="relative flex py-1 items-center">
         <div className="flex-grow border-t border-[#dbe0e6] dark:border-gray-700"></div>
         <span className="flex-shrink-0 mx-4 text-[#60758a] dark:text-gray-500 text-sm font-medium">
           {MOCK_DATA.social.text}
@@ -135,10 +174,12 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 text-center">
+      <div className="text-center">
         <p className="text-xs text-[#60758a] dark:text-gray-500">
           {MOCK_DATA.footer.text}{" "}
-          <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">{MOCK_DATA.footer.terms}</Link> and <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">{MOCK_DATA.footer.privacy}</Link>.
+          <Link href={MOCK_DATA.footer.linkHref} className="text-primary font-bold hover:underline">
+            {MOCK_DATA.footer.linkText}
+          </Link>
         </p>
       </div>
     </AuthLayout>

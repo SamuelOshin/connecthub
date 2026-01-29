@@ -4,7 +4,7 @@ import { HelpCategoryCard } from "@/components/features/help/HelpCategoryCard";
 import { FAQItem } from "@/components/features/help/FAQItem";
 import { Search, Home, User, Star, ShieldAlert, Wrench, ThumbsUp, ThumbsDown } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 const HELP_CATEGORIES = [
   {

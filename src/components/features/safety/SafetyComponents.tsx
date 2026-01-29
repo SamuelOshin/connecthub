@@ -1,5 +1,5 @@
 import { Search, Shield, Flag, Eye, CheckCircle2, Check, Phone, ArrowRight, MessageSquare, Lock, FileText } from "lucide-react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 export function SafetyHero() {
   return (
@@ -23,7 +23,7 @@ export function SafetyHero() {
               placeholder="How can we help you stay safe?"
               type="text"
             />
-            <Button variant="primary" className="rounded-full w-12 h-12 p-0 flex-shrink-0 flex items-center justify-center">
+            <Button variant="default" className="rounded-full w-12 h-12 p-0 flex-shrink-0 flex items-center justify-center">
                 <Search className="w-5 h-5" />
             </Button>
           </div>

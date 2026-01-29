@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArticleCard } from "@/components/features/blog/ArticleCard";
 import { Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 const BLOG_CATEGORIES = [
   "All Stories",

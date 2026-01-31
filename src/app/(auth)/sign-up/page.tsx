@@ -2,24 +2,15 @@ import Link from "next/link";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SocialButton } from "@/components/ui/social-button";
 import { User, Mail, Lock, Eye, ArrowRight, Activity } from "lucide-react";
 
 const MOCK_DATA = {
-  header: {
-    title: "ConnectHub",
-    logoIcon: Activity // Using Activity as placeholder for 'hub' icon if needed, or stick to simple logic
-  },
-  pageTitle: "Create Account",
+  pageTitle: "Join ConnectHub",
   pageSubtitle: "Start your journey to finding love today.",
-  tabs: {
-    login: "Log In",
-    signup: "Sign Up"
-  },
   form: {
     nameLabel: "Full Name",
     namePlaceholder: "Enter your full name",
-    emailLabel: "Email or Phone",
+    emailLabel: "Email",
     emailPlaceholder: "Enter your email",
     passwordLabel: "Create Password",
     passwordPlaceholder: "Create a strong password",
@@ -33,7 +24,7 @@ const MOCK_DATA = {
   },
   footer: {
     text: "Already have an account?",
-    linkText: "Log in",
+    linkText: "Sign in",
     linkHref: "/login"
   }
 };
@@ -41,43 +32,14 @@ const MOCK_DATA = {
 export default function SignUpPage() {
   return (
     <AuthLayout>
-      {/* Brand Header */}
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
-          <Activity className="w-5 h-5" />
-        </div>
-        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl font-bold">
-          {MOCK_DATA.header.title}
-        </h3>
-      </div>
-
       {/* Page Title */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mb-2">
         <h1 className="text-[#111418] dark:text-white text-3xl font-extrabold leading-tight tracking-[-0.02em]">
           {MOCK_DATA.pageTitle}
         </h1>
         <p className="text-[#60758a] dark:text-gray-400 text-base font-normal">
           {MOCK_DATA.pageSubtitle}
         </p>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-[#dbe0e6] dark:border-gray-700 w-full mb-2">
-        <div className="flex gap-8">
-          <Link
-            href="/login"
-            className="flex items-center justify-center border-b-[3px] border-transparent text-[#60758a] dark:text-gray-500 hover:text-[#111418] dark:hover:text-gray-300 pb-3 pt-2 cursor-pointer transition-colors"
-          >
-            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.login}
-            </span>
-          </Link>
-          <div className="flex items-center justify-center border-b-[3px] border-primary text-[#111418] dark:text-white pb-3 pt-2 cursor-pointer transition-colors">
-            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.signup}
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* Form */}
@@ -157,21 +119,6 @@ export default function SignUpPage() {
             <ArrowRight className="w-5 h-5" />
         </Button>
       </form>
-
-      {/* Divider */}
-      <div className="relative flex py-1 items-center">
-        <div className="flex-grow border-t border-[#dbe0e6] dark:border-gray-700"></div>
-        <span className="flex-shrink-0 mx-4 text-[#60758a] dark:text-gray-500 text-sm font-medium">
-          {MOCK_DATA.social.text}
-        </span>
-        <div className="flex-grow border-t border-[#dbe0e6] dark:border-gray-700"></div>
-      </div>
-
-      {/* Social Buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <SocialButton provider="google" />
-        <SocialButton provider="apple" />
-      </div>
 
       {/* Footer */}
       <div className="text-center">

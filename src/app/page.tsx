@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProcessSection } from "@/components/ProcessSection";
-import { SafetySection } from "@/components/SafetySection";
+import { TrustBar } from "@/components/TrustBar";
+import { TestimonialSection } from "@/components/TestimonialSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 
@@ -11,8 +12,9 @@ export default function Home() {
       <Header />
       <main className="flex-1 flex flex-col items-center w-full">
         <Hero />
+        <TrustBar />
         <ProcessSection />
-        <SafetySection />
+        <TestimonialSection />
         <CTASection />
         <Footer />
       </main>

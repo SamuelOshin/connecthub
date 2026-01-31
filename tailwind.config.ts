@@ -48,8 +48,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        "sans": ["var(--font-inter)", "sans-serif"],
-        "display": ["var(--font-inter)", "sans-serif"],
+        "sans": ["var(--font-body)", "sans-serif"],
+        "display": ["var(--font-display)", "sans-serif"],
+        "body": ["var(--font-body)", "sans-serif"],
       },
       borderRadius: {
         "lg": "0.5rem",

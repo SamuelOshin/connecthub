@@ -1,34 +1,20 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Noto_Sans } from "next/font/google";
-import "./globals.css";
+import { Header } from "@/components/layout/Header";
+import { Sidebar } from "@/components/layout/Sidebar";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const notoSans = Noto_Sans({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-export const metadata: Metadata = {
-  title: "ConnectHub",
-  description: "Find Your Perfect Match Today",
-};
-
-export default function RootLayout({
+export default function DashboardLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="light">
-      <body className={`${plusJakartaSans.variable} ${notoSans.variable} font-body antialiased bg-white dark:bg-background-dark text-[#101418]`}>
-        {children}
-      </body>
-    </html>
+    <div className="h-screen flex flex-col bg-[#f5f7f8] dark:bg-[#0f1923] overflow-hidden">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar className="hidden md:flex shrink-0" />
+        <main className="flex-1 overflow-hidden flex flex-col relative">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }

@@ -19,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            "flex h-12 w-full rounded-2xl border border-[#dbe0e6] bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 transition-shadow",
+            "flex h-12 w-full rounded-2xl border border-[#dbe0e6] bg-white px-3 py-2 text-sm text-[#111418] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#b0b8c1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 transition-shadow",
             leftIcon && "pl-11",
             rightIcon && "pr-11",
             className

@@ -11,12 +11,8 @@ const MOCK_DATA = {
   },
   pageTitle: "Welcome Back",
   pageSubtitle: "Please enter your details to sign in.",
-  tabs: {
-    login: "Log In",
-    signup: "Sign Up"
-  },
   form: {
-    emailLabel: "Email or Phone",
+    emailLabel: "Email",
     emailPlaceholder: "Enter your email",
     passwordLabel: "Password",
     passwordPlaceholder: "Enter your password",
@@ -27,9 +23,9 @@ const MOCK_DATA = {
     text: "Or continue with"
   },
   footer: {
-    text: "By clicking Sign In, you agree to our",
-    terms: "Terms of Service",
-    privacy: "Privacy Policy"
+    text: "Don't have an account yet?",
+    linkText: "Sign Up",
+    linkHref: "/sign-up"
   }
 };
 
@@ -56,24 +52,6 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-[#dbe0e6] dark:border-gray-700 w-full mb-2">
-        <div className="flex gap-8">
-          <div className="flex items-center justify-center border-b-[3px] border-primary text-[#111418] dark:text-white pb-3 pt-2 cursor-pointer transition-colors">
-            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.login}
-            </span>
-          </div>
-          <Link
-            href="/sign-up"
-            className="flex items-center justify-center border-b-[3px] border-transparent text-[#60758a] dark:text-gray-500 hover:text-[#111418] dark:hover:text-gray-300 pb-3 pt-2 cursor-pointer transition-colors"
-          >
-            <span className="text-sm font-bold leading-normal tracking-[0.015em]">
-              {MOCK_DATA.tabs.signup}
-            </span>
-          </Link>
-        </div>
-      </div>
 
       {/* Form */}
       <form className="flex flex-col gap-4">
@@ -138,7 +116,9 @@ export default function LoginPage() {
       <div className="mt-4 text-center">
         <p className="text-xs text-[#60758a] dark:text-gray-500">
           {MOCK_DATA.footer.text}{" "}
-          <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">{MOCK_DATA.footer.terms}</Link> and <Link href="#" className="text-[#111418] dark:text-white font-medium hover:underline">{MOCK_DATA.footer.privacy}</Link>.
+          <Link href={MOCK_DATA.footer.linkHref} className="text-primary font-bold hover:underline">
+            {MOCK_DATA.footer.linkText}
+          </Link>
         </p>
       </div>
     </AuthLayout>

@@ -30,8 +30,10 @@ export function Sidebar({ className }: { className?: string }) {
   return (
     <nav 
       className={cn(
-        "flex flex-col h-full bg-white dark:bg-[#1a242f] border-r border-slate-200 dark:border-slate-800 z-20 shadow-sm transition-all duration-300 ease-in-out",
+        "flex flex-col h-full bg-white dark:bg-[#1a242f] border-r border-slate-200 dark:border-slate-800 z-20 shadow-sm",
         isExpanded ? "w-64" : "w-[72px]",
+        // Only animate when toggling collapse state, not on hover
+        !isHovered && "transition-all duration-300 ease-in-out",
         className
       )}
       onMouseEnter={() => isCollapsed && setIsHovered(true)}

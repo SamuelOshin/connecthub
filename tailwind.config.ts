@@ -35,7 +35,7 @@ const config: Config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "#FF7F50",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
@@ -48,14 +48,17 @@ const config: Config = {
         },
       },
       fontFamily: {
+        "display": ["var(--font-display)", "Plus Jakarta Sans", "sans-serif"],
         "sans": ["var(--font-body)", "sans-serif"],
-        "display": ["var(--font-display)", "sans-serif"],
         "body": ["var(--font-body)", "sans-serif"],
       },
       borderRadius: {
-        "lg": "0.5rem",
+        "lg": "var(--radius)",
+        "md": "calc(var(--radius) - 2px)",
+        "sm": "calc(var(--radius) - 4px)",
         "xl": "1rem",
         "2xl": "1.5rem",
+        "3xl": "2rem",
       },
     },
   },

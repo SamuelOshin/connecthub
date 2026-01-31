@@ -20,7 +20,6 @@ const config: Config = {
         "background-light": "#f5f7f8",
         "background-dark": "#0f1923",
         "brand-dark": "#0B1120",
-        "accent": "#FF7F50",
         // Shadcn/ui like colors
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -36,7 +35,7 @@ const config: Config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "#FF7F50",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
@@ -49,25 +48,17 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // "display": ["Plus Jakarta Sans", "sans-serif"],
         "display": ["var(--font-display)", "Plus Jakarta Sans", "sans-serif"],
-        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+        "sans": ["var(--font-body)", "sans-serif"],
+        "body": ["var(--font-body)", "sans-serif"],
       },
       borderRadius: {
         "lg": "var(--radius)",
         "md": "calc(var(--radius) - 2px)",
         "sm": "calc(var(--radius) - 4px)",
-        "xl": "3rem",
-        "2xl": "4rem", 
-        "3xl": "5rem", // Adding based on design usage like rounded-[3rem] which is roughly 3xl in tailwind
-      },        "sans": ["var(--font-body)", "sans-serif"],
-        "display": ["var(--font-display)", "sans-serif"],
-        "body": ["var(--font-body)", "sans-serif"],
-      },
-      borderRadius: {
-        "lg": "0.5rem",
         "xl": "1rem",
         "2xl": "1.5rem",
+        "3xl": "2rem",
       },
     },
   },

@@ -7,7 +7,8 @@ export default function PremiumPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-10">
+    <div className="overflow-y-auto h-full">
+      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-10">
       {/* Hero Section */}
       <div className="mb-12 flex flex-col items-center gap-4 text-center">
         <h1 className="text-3xl font-extrabold tracking-tight text-[#101418] dark:text-white md:text-5xl">
@@ -226,6 +227,7 @@ export default function PremiumPage() {
           © 2023 ConnectHub. All rights reserved.
         </p>
       </div>
+    </div>
     </div>
   );
 }

@@ -17,7 +17,8 @@ import {
 
 export default function ProfilePage() {
   return (
-    <div className="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto w-full">
+    <div className="overflow-y-auto h-full">
+      <div className="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto w-full">
       {/* Page Specific Header Actions (simulated as top of content) */}
       <div className="flex items-center justify-between mb-8">
          <h1 className="text-3xl font-bold text-[#101418] dark:text-white hidden sm:block">Edit Profile</h1>
@@ -214,6 +215,7 @@ export default function ProfilePage() {
         </section>
       </div>
       <div className="h-10"></div>
+    </div>
     </div>
   );
 }

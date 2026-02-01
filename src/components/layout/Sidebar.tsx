@@ -1,3 +1,5 @@
+"use client";
+
 import { Compass, Heart, MessageCircle, User, Settings, Zap, PanelLeftClose, PanelLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

@@ -21,7 +21,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
         <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white hidden md:block">
           ConnectHub
         </h1>
-        <button 
+        <button
           className="md:hidden p-1 text-slate-500"
           onClick={onMenuClick}
         >
@@ -34,12 +34,12 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
           <Bell className="w-5 h-5" />
           <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white dark:border-[#1a242f]"></span>
         </button>
-        
+
         <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
-        
+
         <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-          <div 
-            className="h-9 w-9 rounded-full bg-cover bg-center ring-2 ring-slate-100 dark:ring-slate-700" 
+          <div
+            className="h-9 w-9 rounded-full bg-cover bg-center ring-2 ring-slate-100 dark:ring-slate-700"
             style={{ backgroundImage: `url('${USER.avatar}')` }}
           />
         </div>

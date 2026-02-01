@@ -23,12 +23,12 @@ const USER = {
 export function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();
   const { isCollapsed, isHovered, setIsHovered, toggle } = useSidebar();
-  
+
   // Determine if sidebar should show expanded view
   const isExpanded = !isCollapsed || isHovered;
 
   return (
-    <nav 
+    <nav
       className={cn(
         "flex flex-col h-full bg-white dark:bg-[#1a242f] border-r border-slate-200 dark:border-slate-800 z-20 shadow-sm",
         isExpanded ? "w-64" : "w-[72px]",
@@ -58,7 +58,7 @@ export function Sidebar({ className }: { className?: string }) {
         {NAV_ITEMS.map((item) => {
           const isActive = pathname.startsWith(item.href);
           const Icon = item.icon;
-          
+
           return (
             <Link
               key={item.href}
@@ -66,17 +66,17 @@ export function Sidebar({ className }: { className?: string }) {
               className={cn(
                 "flex items-center gap-3 px-3 py-3 rounded-xl transition-all group relative",
                 isExpanded ? "" : "justify-center",
-                isActive 
-                  ? "bg-primary text-white shadow-md shadow-blue-500/20" 
+                isActive
+                  ? "bg-primary text-white shadow-md shadow-blue-500/20"
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary"
               )}
               title={!isExpanded ? item.label : undefined}
             >
-              <Icon 
+              <Icon
                 className={cn(
                   "w-6 h-6 transition-transform shrink-0",
                   !isActive && "group-hover:scale-110"
-                )} 
+                )}
                 fill={isActive && item.label === "Matches" ? "currentColor" : "none"}
               />
               {isExpanded && (
@@ -114,21 +114,24 @@ export function Sidebar({ className }: { className?: string }) {
               Go Premium <Zap className="w-3 h-3 text-yellow-500 fill-yellow-500" />
             </p>
             <p className="text-[10px] text-slate-500 mb-2 relative z-10">See who likes you & more!</p>
-            <Button className="w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold rounded-lg hover:shadow-lg transition-all relative z-10">
-              Upgrade
-            </Button>
+            <Link href="/premium">
+              <Button className="w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold rounded-lg hover:shadow-lg transition-all relative z-10">
+                Upgrade
+              </Button>
+            </Link>
           </div>
         )}
 
         {/* Collapsed Premium Icon */}
         {!isExpanded && (
           <div className="flex justify-center">
-            <button 
+            <Link
+              href="/premium"
               className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary/10 to-purple-500/10 flex items-center justify-center hover:shadow-md transition-all"
               title="Go Premium"
             >
               <Zap className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-            </button>
+            </Link>
           </div>
         )}
 
@@ -137,8 +140,8 @@ export function Sidebar({ className }: { className?: string }) {
             "flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors",
             !isExpanded && "justify-center"
           )}>
-            <div 
-              className="h-9 w-9 rounded-full bg-cover bg-center ring-2 ring-white dark:ring-slate-700 shrink-0" 
+            <div
+              className="h-9 w-9 rounded-full bg-cover bg-center ring-2 ring-white dark:ring-slate-700 shrink-0"
               style={{ backgroundImage: `url('${USER.avatar}')` }}
             />
             {isExpanded && (
@@ -147,7 +150,9 @@ export function Sidebar({ className }: { className?: string }) {
                   <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{USER.name}</p>
                   <p className="text-xs text-slate-500 font-medium">{USER.handle}</p>
                 </div>
-                <Settings className="ml-auto w-5 h-5 text-slate-400" />
+                <Link href="/settings" className="ml-auto">
+                  <Settings className="w-5 h-5 text-slate-400 hover:text-primary transition-colors" />
+                </Link>
               </>
             )}
           </div>

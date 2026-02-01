@@ -15,35 +15,35 @@ export interface Message {
 
 export function ChatArea() {
   const MESSAGES: Message[] = [
-    { 
-      id: "0", 
-      type: "system", 
+    {
+      id: "0",
+      type: "system",
       text: "Sarah made the first move. Be a gentleman and reply!",
-      timestamp: "Today, 10:23 AM", 
-      sender: "them" 
+      timestamp: "Today, 10:23 AM",
+      sender: "them"
     },
-    { 
-      id: "1", 
-      text: "Hey! 👋 I noticed you have a picture at Yosemite. I was just there last summer!", 
-      sender: "them", 
-      timestamp: "10:23 AM" 
+    {
+      id: "1",
+      text: "Hey! 👋 I noticed you have a picture at Yosemite. I was just there last summer!",
+      sender: "them",
+      timestamp: "10:23 AM"
     },
-    { 
-      id: "2", 
-      text: "The Half Dome hike was intense but totally worth it. Did you make it to the top?", 
-      sender: "them", 
-      timestamp: "10:24 AM" 
+    {
+      id: "2",
+      text: "The Half Dome hike was intense but totally worth it. Did you make it to the top?",
+      sender: "them",
+      timestamp: "10:24 AM"
     },
-    { 
-      id: "3", 
-      text: "Hi Sarah! Yes, Yosemite is incredible. 🏔️", 
-      sender: "me", 
-      timestamp: "10:30 AM" 
+    {
+      id: "3",
+      text: "Hi Sarah! Yes, Yosemite is incredible. 🏔️",
+      sender: "me",
+      timestamp: "10:30 AM"
     },
-    { 
-      id: "4", 
-      text: "I actually did Half Dome a couple of years ago. My legs were dead for a week after! 😂", 
-      sender: "me", 
+    {
+      id: "4",
+      text: "I actually did Half Dome a couple of years ago. My legs were dead for a week after! 😂",
+      sender: "me",
       timestamp: "10:30 AM",
       isRead: true
     },
@@ -62,8 +62,8 @@ export function ChatArea() {
       <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1a242f] shadow-sm z-10 shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative cursor-pointer">
-            <div 
-              className="h-10 w-10 rounded-full bg-cover bg-center" 
+            <div
+              className="h-10 w-10 rounded-full bg-cover bg-center"
               style={{ backgroundImage: `url('${USER.avatar}')` }}
             />
             <div className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-green-500 border-2 border-white dark:border-[#1a242f] rounded-full"></div>
@@ -116,18 +116,18 @@ export function ChatArea() {
           return (
             <div key={msg.id} className={cn("flex items-end gap-3 max-w-[80%]", isMe ? "ml-auto justify-end" : "")}>
               {!isMe && (
-                <div 
-                  className="h-8 w-8 rounded-full bg-cover bg-center mb-1 shrink-0" 
+                <div
+                  className="h-8 w-8 rounded-full bg-cover bg-center mb-1 shrink-0"
                   style={{ backgroundImage: `url('${USER.avatar}')` }}
                 />
               )}
-              
+
               <div className={cn("flex flex-col gap-1", isMe ? "items-end" : "items-start")}>
-                <div 
+                <div
                   className={cn(
                     "p-4 rounded-2xl shadow-sm text-sm leading-relaxed",
-                    isMe 
-                      ? "bg-primary text-white rounded-br-none" 
+                    isMe
+                      ? "bg-primary text-white rounded-br-none"
                       : "bg-[#f0f2f5] dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-none"
                   )}
                 >
@@ -141,7 +141,7 @@ export function ChatArea() {
             </div>
           );
         })}
-        
+
         {/* Suggested Actions */}
         <div className="flex flex-wrap justify-center gap-2 mt-4 py-2">
             <Button variant="outline" className="bg-white dark:bg-slate-800 border-primary/20 hover:border-primary text-primary dark:text-blue-400 rounded-full text-xs h-auto py-2 shadow-sm hover:shadow transform hover:-translate-y-0.5">
@@ -163,9 +163,9 @@ export function ChatArea() {
             <ImageIcon className="w-6 h-6" />
           </button>
           <div className="flex-1 bg-[#f0f2f5] dark:bg-slate-800 rounded-3xl flex items-center px-4 py-3 border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
-            <textarea 
-              className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm text-slate-900 dark:text-white placeholder-slate-500 resize-none max-h-32 outline-none" 
-              placeholder="Type a message..." 
+            <textarea
+              className="w-full bg-transparent border-none focus:ring-0 p-0 text-sm text-slate-900 dark:text-white placeholder-slate-500 resize-none max-h-32 outline-none"
+              placeholder="Type a message..."
               rows={1}
             />
             <button className="ml-2 text-slate-400 hover:text-yellow-500 transition-colors">

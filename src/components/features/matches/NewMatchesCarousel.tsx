@@ -17,7 +17,7 @@ export function NewMatchesCarousel({ matches }: { matches: NewMatch[] }) {
         New Matches
         <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{matches.length}</span>
       </h2>
-      
+
       <div className="flex gap-6 overflow-x-auto pb-4 hide-scrollbar">
         {/* Likes You Card */}
         <div className="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer group">
@@ -37,8 +37,8 @@ export function NewMatchesCarousel({ matches }: { matches: NewMatch[] }) {
           <div key={match.id} className="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer group">
             <div className="relative">
               <div className="h-16 w-16 rounded-full p-0.5 bg-gradient-to-tr from-primary to-purple-500">
-                <div 
-                  className="h-full w-full rounded-full border-2 border-white dark:border-[#1a242f] bg-cover bg-center" 
+                <div
+                  className="h-full w-full rounded-full border-2 border-white dark:border-[#1a242f] bg-cover bg-center"
                   style={{ backgroundImage: `url('${match.image}')` }}
                 />
               </div>

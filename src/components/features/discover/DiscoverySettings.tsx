@@ -9,7 +9,7 @@ const INTERESTS = ["Photography", "Music", "Travel", "Foodie", "Art", "Gaming"];
 
 export function DiscoverySettings() {
   const [distance, setDistance] = useState(25);
-  
+
   return (
     <aside className="w-80 hidden xl:flex flex-col h-full bg-white dark:bg-[#1a242f] border-l border-slate-200 dark:border-slate-800 overflow-y-auto shrink-0">
       <div className="p-8">
@@ -29,10 +29,10 @@ export function DiscoverySettings() {
             </div>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-              <input 
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 transition-all" 
-                type="text" 
-                defaultValue="San Francisco, CA" 
+              <input
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 transition-all"
+                type="text"
+                defaultValue="San Francisco, CA"
               />
             </div>
           </div>
@@ -43,11 +43,11 @@ export function DiscoverySettings() {
               <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Maximum Distance</label>
               <span className="text-sm font-semibold text-slate-500">{distance}km</span>
             </div>
-            <input 
-              className="h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary" 
-              max="100" 
-              min="1" 
-              type="range" 
+            <input
+              className="h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary"
+              max="100"
+              min="1"
+              type="range"
               value={distance}
               onChange={(e) => setDistance(Number(e.target.value))}
             />
@@ -83,7 +83,7 @@ export function DiscoverySettings() {
             <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Common Interests</label>
             <div className="flex flex-wrap gap-2">
               {INTERESTS.map((interest) => (
-                <button 
+                <button
                   key={interest}
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors border",
@@ -99,7 +99,7 @@ export function DiscoverySettings() {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-auto p-6">
         <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden">
           <div className="absolute -right-4 -top-4 bg-white/10 w-24 h-24 rounded-full blur-xl"></div>

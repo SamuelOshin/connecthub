@@ -17,7 +17,8 @@ import Link from "next/link";
 
 export default function SettingsPage() {
   return (
-    <div className="flex justify-center py-8 px-4 md:px-8">
+    <div className="overflow-y-auto h-full">
+      <div className="flex justify-center py-8 px-4 md:px-8">
       <div className="flex w-full max-w-[1024px] gap-8 flex-col lg:flex-row">
         {/* Settings Sidebar */}
         <aside className="w-full lg:w-64 flex-shrink-0">
@@ -221,6 +222,7 @@ export default function SettingsPage() {
           </div>
         </main>
       </div>
+    </div>
     </div>
   );
 }

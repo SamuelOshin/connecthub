@@ -20,9 +20,9 @@ export default function DiscoverPage() {
       <main className="flex-1 relative flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto">
         {/* Background Blob */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-200/20 dark:bg-blue-900/10 rounded-full blur-[100px] pointer-events-none" />
-        
+
         <DiscoveryCard profile={MOCK_PROFILE} />
-        
+
         <div className="mt-6 flex gap-8 text-xs font-medium text-slate-400 dark:text-slate-500">
           <span className="flex items-center gap-1">
             <kbd className="px-2 py-1 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans shadow-sm">←</kbd> Pass
@@ -35,7 +35,7 @@ export default function DiscoverPage() {
           </span>
         </div>
       </main>
-      
+
       <DiscoverySettings />
     </div>
   );

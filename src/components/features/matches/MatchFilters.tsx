@@ -19,9 +19,9 @@ export function MatchFilters() {
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input 
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 transition-all" 
-              placeholder="Search matches..." 
+            <input
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 transition-all"
+              placeholder="Search matches..."
               type="text"
             />
           </div>
@@ -29,7 +29,7 @@ export function MatchFilters() {
           {/* Status */}
           <div className="flex flex-col gap-3">
             <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Status</label>
-            
+
             <label className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors group">
               <div className="relative flex items-center">
                 <input type="checkbox" className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-slate-300 dark:border-slate-600 checked:border-primary checked:bg-primary transition-all" />
@@ -63,7 +63,7 @@ export function MatchFilters() {
             <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Interests</label>
             <div className="flex flex-wrap gap-2">
               {INTERESTS.map((interest) => (
-                <button 
+                <button
                   key={interest}
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors border",
@@ -79,7 +79,7 @@ export function MatchFilters() {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-auto p-6">
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all">
           <div className="absolute -right-4 -top-4 bg-white/10 w-24 h-24 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>

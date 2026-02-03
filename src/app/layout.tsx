@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Noto_Sans } from "next/font/google";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body className={`${plusJakartaSans.variable} ${notoSans.variable} font-body antialiased bg-white dark:bg-background-dark text-[#101418]`}>
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

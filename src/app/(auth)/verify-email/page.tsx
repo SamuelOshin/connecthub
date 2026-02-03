@@ -1,105 +1,95 @@
-import Link from "next/link";
-import { AuthLayout } from "@/components/layout/AuthLayout";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, Activity, ArrowLeft } from "lucide-react";
+/**
+ * Email Verification Page.
+ * Shows confirmation message after signup (magic link sent).
+ */
 
-const MOCK_DATA = {
-  header: {
-    title: "ConnectHub",
-  },
-  pageTitle: "Check your inbox",
-  pageSubtitle: "We've sent a 6-digit verification code to ",
-  email: "jo***@example.com",
-  subtitleSuffix: ". Please enter the code below.",
-  form: {
-    submitButton: "Verify Account"
-  },
-  resend: {
-    text: "Didn't receive the code?",
-    linkText: "Resend Code",
-    timer: "00:45"
-  },
-  backLink: "Back to Login",
-  testimonial: {
-    quote: "Verification is the first step to finding real connections. Your safety is our priority.",
-    author: "ConnectHub Security",
-    role: "Trusted by millions"
-  },
-  imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuCCrqFVg6RL9bgIZ_V5vPbC3r-RPrFCPEaW7sTWvhlCKJ79YkSQC1wRjlISjixRL-kvxnkSt8WRHK3j74BThBd43yMroFGh9TqU-8Gd1xGcbAFMfhvgqp31kOdlbCEEzqi6SyMBu2ThzCe_Bi_JpB7D8pSxdaE7dEkguYGMMsZteEI-WO9aSaeCCp5PNsszDnr8DTc4IbnoTkQDa0I6hZFtwT6bp_mLfFqQ_hC7kKZHfpA-VfeATZ-kprnk_ye96nhBCaQ5LHMSySP5",
-  imageAlt: "Calm nature lifestyle scene"
-};
+'use client'
 
-export default function VerifyEmailPage() {
+import { Suspense } from 'react'
+import Link from 'next/link'
+import { AuthLayout } from '@/components/layout/AuthLayout'
+import { Button } from '@/components/ui/button'
+import { Activity, Mail, ArrowLeft, RefreshCw } from 'lucide-react'
+
+function VerifyEmailContent() {
   return (
-    <AuthLayout
-        testimonial={MOCK_DATA.testimonial}
-        imageSrc={MOCK_DATA.imageSrc}
-        imageAlt={MOCK_DATA.imageAlt}
-    >
+    <AuthLayout>
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-2">
         <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
           <Activity className="w-5 h-5" />
         </div>
         <h3 className="text-[#111418] dark:text-white tracking-tight text-xl font-bold">
-          {MOCK_DATA.header.title}
+          ConnectHub
         </h3>
       </div>
 
+      {/* Success Icon */}
+      <div className="flex justify-center my-6">
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+          <Mail className="w-10 h-10 text-primary" />
+        </div>
+      </div>
+
       {/* Page Title */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3 mb-8 text-center">
         <h1 className="text-[#111418] dark:text-white text-3xl font-extrabold leading-tight tracking-[-0.02em]">
-          {MOCK_DATA.pageTitle}
+          Check your email
         </h1>
         <p className="text-[#60758a] dark:text-gray-400 text-base font-normal">
-          {MOCK_DATA.pageSubtitle}
-          <span className="text-[#111418] dark:text-white font-medium">{MOCK_DATA.email}</span>
-          {MOCK_DATA.subtitleSuffix}
+          We've sent a confirmation link to your email address. Click the link in the email to verify your account and get started.
         </p>
       </div>
 
-      {/* Form */}
-      <form className="flex flex-col gap-6">
-        <div className="flex gap-2 sm:gap-4 justify-between">
-          {[1, 2, 3, 4, 5, 6].map((_, i) => (
-            <input
-              key={i}
-              type="text"
-              maxLength={1}
-              autoFocus={i === 0}
-              className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow"
-            />
-          ))}
-        </div>
+      {/* Instructions */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mb-6">
+        <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-2">
+          What to do next:
+        </h3>
+        <ol className="text-sm text-blue-800 dark:text-blue-400 space-y-1.5 list-decimal list-inside">
+          <li>Open your email inbox</li>
+          <li>Find the email from ConnectHub</li>
+          <li>Click the "Confirm your email" link</li>
+          <li>You'll be automatically signed in</li>
+        </ol>
+      </div>
 
-        <Button className="w-full gap-2 text-base" size="lg">
-            <span>{MOCK_DATA.form.submitButton}</span>
-            <CheckCircle className="w-5 h-5" />
-        </Button>
-      </form>
-
-      {/* Resend */}
-      <div className="flex flex-col items-center justify-center gap-1 text-center">
+      {/* Resend Option */}
+      <div className="flex flex-col items-center gap-3 py-4 border-t border-[#dbe0e6] dark:border-gray-700">
         <p className="text-sm text-[#60758a] dark:text-gray-500">
-            {MOCK_DATA.resend.text}
+          Didn't receive the email?
         </p>
-        <div className="flex items-center gap-2">
-            <Link href="#" className="text-primary text-sm font-semibold hover:underline cursor-pointer flex items-center gap-1">
-                {MOCK_DATA.resend.linkText}
-            </Link>
-            <span className="text-xs text-[#60758a] dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full font-medium">
-                {MOCK_DATA.resend.timer}
-            </span>
-        </div>
+        <Button
+          variant="outline"
+          className="gap-2"
+          onClick={() => window.location.reload()}
+        >
+          <RefreshCw className="w-4 h-4" />
+          Request New Link
+        </Button>
+        <p className="text-xs text-[#60758a] dark:text-gray-500 text-center max-w-sm">
+          Check your spam folder or try resending the confirmation email
+        </p>
       </div>
 
       {/* Back Link */}
-      <div className="mt-4 border-t border-[#dbe0e6] dark:border-gray-700 pt-6 text-center">
-        <Link href="/login" className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#60758a] dark:text-gray-400 hover:text-[#111418] dark:hover:text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            {MOCK_DATA.backLink}
+      <div className="mt-4 pt-6 text-center border-t border-[#dbe0e6] dark:border-gray-700">
+        <Link 
+          href="/login" 
+          className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#60758a] dark:text-gray-400 hover:text-[#111418] dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back to Login
         </Link>
       </div>
     </AuthLayout>
-  );
+  )
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
+  )
 }

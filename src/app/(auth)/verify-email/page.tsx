@@ -9,18 +9,18 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { Button } from '@/components/ui/button'
-import { Activity, Mail, ArrowLeft, RefreshCw } from 'lucide-react'
+import { PulseLogo } from '@/components/brand/PulseLogo'
+import { Mail, ArrowLeft, RefreshCw } from 'lucide-react'
 
 function VerifyEmailContent() {
   return (
     <AuthLayout>
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
-          <Activity className="w-5 h-5" />
-        </div>
-        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl font-bold">
-          ConnectHub
+        <PulseLogo width={40} height={40} />
+        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl">
+          <span className="font-bold">Connect</span>
+          <span className="font-normal">Hub</span>
         </h3>
       </div>
 
@@ -74,8 +74,8 @@ function VerifyEmailContent() {
 
       {/* Back Link */}
       <div className="mt-4 pt-6 text-center border-t border-[#dbe0e6] dark:border-gray-700">
-        <Link 
-          href="/login" 
+        <Link
+          href="/login"
           className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#60758a] dark:text-gray-400 hover:text-[#111418] dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

@@ -1,5 +1,5 @@
 /**
- * Profile Edit Form Component.
+ * Profile Edit Form Component with Material Symbols.
  */
 
 'use client'
@@ -9,13 +9,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { profileApi } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { User, Calendar, MapPin, Heart, Loader2, Check } from 'lucide-react'
 
 interface ProfileFormData {
     display_name: string
     bio: string
     gender: string
     looking_for: string[]
+    passions: string[]
     preferences: {
         min_age: number
         max_age: number
@@ -25,10 +25,16 @@ interface ProfileFormData {
 }
 
 const GENDER_OPTIONS = [
-    { value: 'male', label: 'Man' },
-    { value: 'female', label: 'Woman' },
-    { value: 'non-binary', label: 'Non-binary' },
-    { value: 'other', label: 'Other' },
+    { value: 'male', label: 'Man', icon: 'male' },
+    { value: 'female', label: 'Woman', icon: 'female' },
+    { value: 'non-binary', label: 'Non-binary', icon: 'transgender' },
+    { value: 'other', label: 'Other', icon: 'more_horiz' },
+]
+
+const PASSION_OPTIONS = [
+    '🎵 Music', '🏋️ Fitness', '✈️ Travel', '📚 Reading',
+    '🎮 Gaming', '🎨 Art', '📷 Photography', '🍳 Cooking',
+    '🎬 Movies', '🧘 Yoga', '🐕 Dogs', '☕ Coffee'
 ]
 
 export function ProfileEditForm() {
@@ -47,6 +53,7 @@ export function ProfileEditForm() {
         bio: '',
         gender: '',
         looking_for: [],
+        passions: [],
         preferences: {
             min_age: 18,
             max_age: 50,
@@ -63,6 +70,7 @@ export function ProfileEditForm() {
                 bio: profile.bio || '',
                 gender: profile.gender || '',
                 looking_for: profile.looking_for || [],
+                passions: profile.passions || [],
                 preferences: {
                     min_age: profile.preferences?.min_age || 18,
                     max_age: profile.preferences?.max_age || 50,
@@ -110,6 +118,14 @@ export function ProfileEditForm() {
         handlePreferenceChange('show_me', updated)
     }
 
+    const togglePassion = (passion: string) => {
+        const current = formData.passions
+        const updated = current.includes(passion)
+            ? current.filter(p => p !== passion)
+            : [...current, passion]
+        handleChange('passions', updated)
+    }
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         updateMutation.mutate(formData)
@@ -118,17 +134,25 @@ export function ProfileEditForm() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <span className="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
             </div>
         )
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Verified Badge Display */}
+            {profile?.is_verified && (
+                <div className="flex items-center gap-2 px-4 py-3 bg-primary/5 border border-primary/20 rounded-xl">
+                    <span className="material-symbols-outlined text-primary icon-filled">verified</span>
+                    <span className="text-sm font-medium text-primary">Profile Verified</span>
+                </div>
+            )}
+
             {/* Display Name */}
             <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white flex items-center gap-2">
-                    <User className="w-4 h-4" />
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">person</span>
                     Display Name
                 </label>
                 <Input
@@ -137,12 +161,14 @@ export function ProfileEditForm() {
                     onChange={(e) => handleChange('display_name', e.target.value)}
                     placeholder="Your name"
                     maxLength={50}
+                    className="h-12 rounded-xl"
                 />
             </div>
 
             {/* Bio */}
             <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white">
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">edit_note</span>
                     About Me
                 </label>
                 <textarea
@@ -151,32 +177,42 @@ export function ProfileEditForm() {
                     placeholder="Write a little about yourself..."
                     maxLength={500}
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-800 text-[#111418] dark:text-white placeholder:text-[#60758a] focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
                 />
-                <p className="text-xs text-[#60758a] dark:text-gray-400 text-right">
-                    {formData.bio.length}/500
-                </p>
+                <div className="flex justify-between items-center">
+                    <button
+                        type="button"
+                        className="text-xs text-primary font-medium flex items-center gap-1 hover:underline"
+                    >
+                        <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
+                        Get AI suggestions
+                    </button>
+                    <span className="text-xs text-gray-400">
+                        {formData.bio.length}/500
+                    </span>
+                </div>
             </div>
 
             {/* Gender */}
-            <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white">
+            <div className="space-y-3">
+                <label className="text-sm font-bold text-gray-900 dark:text-white">
                     I am a
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                     {GENDER_OPTIONS.map(option => (
                         <button
                             key={option.value}
                             type="button"
                             onClick={() => handleChange('gender', option.value)}
                             className={`
-                px-4 py-3 rounded-xl border text-sm font-medium transition-colors
-                ${formData.gender === option.value
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'bg-white dark:bg-gray-800 text-[#111418] dark:text-white border-[#dbe0e6] dark:border-gray-700 hover:border-primary'
+                                flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all
+                                ${formData.gender === option.value
+                                    ? 'bg-primary text-white border-primary shadow-md shadow-primary/20'
+                                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-primary'
                                 }
-              `}
+                            `}
                         >
+                            <span className="material-symbols-outlined text-[20px]">{option.icon}</span>
                             {option.label}
                         </button>
                     ))}
@@ -184,24 +220,24 @@ export function ProfileEditForm() {
             </div>
 
             {/* Show Me */}
-            <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white flex items-center gap-2">
-                    <Heart className="w-4 h-4" />
-                    Show Me
+            <div className="space-y-3">
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px] icon-filled text-pink-500">favorite</span>
+                    Interested In
                 </label>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     {['male', 'female', 'non-binary'].map(gender => (
                         <button
                             key={gender}
                             type="button"
                             onClick={() => toggleShowMe(gender)}
                             className={`
-                px-4 py-2 rounded-full text-sm font-medium transition-colors
-                ${formData.preferences.show_me.includes(gender)
-                                    ? 'bg-primary text-white'
-                                    : 'bg-gray-100 dark:bg-gray-800 text-[#60758a] hover:bg-gray-200 dark:hover:bg-gray-700'
+                                px-5 py-2.5 rounded-full text-sm font-medium transition-all
+                                ${formData.preferences.show_me.includes(gender)
+                                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                                 }
-              `}
+                            `}
                         >
                             {gender === 'male' ? 'Men' : gender === 'female' ? 'Women' : 'Non-binary'}
                         </button>
@@ -209,11 +245,42 @@ export function ProfileEditForm() {
                 </div>
             </div>
 
+            {/* Passions / Interests */}
+            <div className="space-y-3">
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">interests</span>
+                    Passions
+                    <span className="text-xs text-gray-400 font-normal">(Select up to 5)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                    {PASSION_OPTIONS.map(passion => (
+                        <button
+                            key={passion}
+                            type="button"
+                            onClick={() => togglePassion(passion)}
+                            disabled={!formData.passions.includes(passion) && formData.passions.length >= 5}
+                            className={`
+                                px-4 py-2 rounded-full text-sm font-medium transition-all
+                                ${formData.passions.includes(passion)
+                                    ? 'bg-pink-500 text-white'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-pink-100 dark:hover:bg-pink-900/20 disabled:opacity-50 disabled:cursor-not-allowed'
+                                }
+                            `}
+                        >
+                            {passion}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             {/* Age Range */}
-            <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Age Range: {formData.preferences.min_age} - {formData.preferences.max_age}
+            <div className="space-y-3">
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">calendar_month</span>
+                    Age Range
+                    <span className="ml-auto text-sm font-medium text-primary">
+                        {formData.preferences.min_age} - {formData.preferences.max_age}
+                    </span>
                 </label>
                 <div className="flex items-center gap-4">
                     <input
@@ -236,10 +303,13 @@ export function ProfileEditForm() {
             </div>
 
             {/* Distance */}
-            <div className="space-y-2">
-                <label className="text-sm font-medium text-[#111418] dark:text-white flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    Maximum Distance: {formData.preferences.distance_km} km
+            <div className="space-y-3">
+                <label className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">location_on</span>
+                    Maximum Distance
+                    <span className="ml-auto text-sm font-medium text-primary">
+                        {formData.preferences.distance_km} km
+                    </span>
                 </label>
                 <input
                     type="range"
@@ -254,19 +324,22 @@ export function ProfileEditForm() {
             {/* Submit */}
             <Button
                 type="submit"
-                className="w-full gap-2"
+                className="w-full h-12 gap-2 rounded-xl text-base font-bold shadow-lg shadow-primary/20"
                 size="lg"
                 disabled={updateMutation.isPending}
             >
                 {updateMutation.isPending ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span className="material-symbols-outlined animate-spin">progress_activity</span>
                 ) : saved ? (
                     <>
-                        <Check className="w-5 h-5" />
+                        <span className="material-symbols-outlined icon-filled">check_circle</span>
                         Saved!
                     </>
                 ) : (
-                    'Save Changes'
+                    <>
+                        <span className="material-symbols-outlined">save</span>
+                        Save Changes
+                    </>
                 )}
             </Button>
         </form>

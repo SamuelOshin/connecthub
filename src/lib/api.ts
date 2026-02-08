@@ -5,7 +5,7 @@
 
 import { createClient } from '@/lib/supabase/client'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'
 
 // ============================================================================
 // Types
@@ -139,12 +139,24 @@ export interface Profile {
     age?: number
     distance_km?: number
     primary_photo_url?: string
+    passions?: string[]
+    privacy_settings?: {
+        incognito_mode: boolean
+        active_status: boolean
+        read_receipts: boolean
+    }
+    notification_settings?: {
+        new_matches: boolean
+        new_messages: boolean
+        super_likes: boolean
+        promotions: boolean
+    }
 }
 
 export const profileApi = {
     async getMyProfile(): Promise<Profile | null> {
         try {
-            return await apiRequest<Profile>('/api/v1/profiles/me')
+            return await apiRequest<Profile>('/profiles/me')
         } catch (error) {
             if (error instanceof ApiError && error.statusCode === 404) {
                 return null
@@ -160,17 +172,17 @@ export const profileApi = {
         looking_for?: string[]
         bio?: string
     }): Promise<Profile> {
-        return apiRequest<Profile>('/api/v1/profiles/me', {
+        return apiRequest<Profile>('/profiles/me', {
             method: 'POST',
             body: JSON.stringify(data),
         })
     },
 
     async updateProfile(data: {
-        display_name?: string
-        gender?: string
+        display_name?: string | null
+        gender?: string | null
         looking_for?: string[]
-        bio?: string
+        bio?: string | null
         preferences?: {
             min_age?: number
             max_age?: number
@@ -178,22 +190,34 @@ export const profileApi = {
             show_me?: string[]
         }
         prompts?: { question: string; answer: string }[]
+        passions?: string[]
+        privacy_settings?: {
+            incognito_mode: boolean
+            active_status: boolean
+            read_receipts: boolean
+        }
+        notification_settings?: {
+            new_matches: boolean
+            new_messages: boolean
+            super_likes: boolean
+            promotions: boolean
+        }
     }): Promise<Profile> {
-        return apiRequest<Profile>('/api/v1/profiles/me', {
+        return apiRequest<Profile>('/profiles/me', {
             method: 'PATCH',
             body: JSON.stringify(data),
         })
     },
 
     async updateLocation(latitude: number, longitude: number): Promise<{ status: string }> {
-        return apiRequest('/api/v1/profiles/me/location', {
+        return apiRequest('/profiles/me/location', {
             method: 'PUT',
             body: JSON.stringify({ latitude, longitude }),
         })
     },
 
     async heartbeat(): Promise<void> {
-        await apiRequest('/api/v1/profiles/me/heartbeat', {
+        await apiRequest('/profiles/me/heartbeat', {
             method: 'POST',
         })
     },
@@ -222,11 +246,12 @@ export interface UploadUrlResponse {
 
 export const photosApi = {
     async getMyPhotos(): Promise<Photo[]> {
-        return apiRequest<Photo[]>('/api/v1/photos')
+        const response = await apiRequest<{ photos: Photo[] }>('/photos')
+        return response.photos
     },
 
     async getUploadUrl(): Promise<UploadUrlResponse> {
-        return apiRequest<UploadUrlResponse>('/api/v1/photos/upload-url', {
+        return apiRequest<UploadUrlResponse>('/photos/upload-url', {
             method: 'POST',
         })
     },
@@ -236,7 +261,7 @@ export const photosApi = {
         order_index = 0,
         is_primary = false
     ): Promise<Photo> {
-        return apiRequest<Photo>('/api/v1/photos', {
+        return apiRequest<Photo>('/photos', {
             method: 'POST',
             body: JSON.stringify({ storage_path, order_index, is_primary }),
         })
@@ -246,21 +271,21 @@ export const photosApi = {
         photoId: string,
         data: { order_index?: number; is_primary?: boolean }
     ): Promise<Photo> {
-        return apiRequest<Photo>(`/api/v1/photos/${photoId}`, {
+        return apiRequest<Photo>(`/photos/${photoId}`, {
             method: 'PATCH',
             body: JSON.stringify(data),
         })
     },
 
     async reorderPhotos(photoIds: string[]): Promise<Photo[]> {
-        return apiRequest<Photo[]>('/api/v1/photos/reorder', {
+        return apiRequest<Photo[]>('/photos/reorder', {
             method: 'POST',
             body: JSON.stringify({ photo_ids: photoIds }),
         })
     },
 
     async deletePhoto(photoId: string): Promise<void> {
-        await apiRequest(`/api/v1/photos/${photoId}`, {
+        await apiRequest(`/photos/${photoId}`, {
             method: 'DELETE',
         })
     },

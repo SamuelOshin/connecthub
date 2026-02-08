@@ -14,6 +14,8 @@ import { SocialButton } from '@/components/ui/social-button'
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+import { PulseLogo } from '@/components/brand/PulseLogo'
+
 export default function SignUpPage() {
   const router = useRouter()
   const [fullName, setFullName] = useState('')
@@ -87,7 +89,19 @@ export default function SignUpPage() {
   }
 
   return (
+
+    /* ... existing code ... */
+
     <AuthLayout>
+      {/* Brand Branding - Added for Mobile Consistency */}
+      <div className="flex items-center gap-2 mb-6 lg:hidden">
+        <PulseLogo width={32} height={32} />
+        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl">
+          <span className="font-bold">Connect</span>
+          <span className="font-normal">Hub</span>
+        </h3>
+      </div>
+
       {/* Page Title */}
       <div className="flex flex-col gap-2 mb-2">
         <h1 className="text-[#111418] dark:text-white text-3xl font-extrabold leading-tight tracking-[-0.02em]">
@@ -166,8 +180,8 @@ export default function SignUpPage() {
                   <div
                     key={i}
                     className={`flex-1 rounded-full ${i < passwordStrength
-                        ? strengthColors[passwordStrength - 1]
-                        : 'bg-[#e5e7eb] dark:bg-gray-700'
+                      ? strengthColors[passwordStrength - 1]
+                      : 'bg-[#e5e7eb] dark:bg-gray-700'
                       }`}
                   />
                 ))}
@@ -176,10 +190,10 @@ export default function SignUpPage() {
                 Strength:{' '}
                 <span
                   className={`font-medium ${passwordStrength <= 1
-                      ? 'text-red-500'
-                      : passwordStrength === 2
-                        ? 'text-yellow-600 dark:text-yellow-500'
-                        : 'text-green-600 dark:text-green-500'
+                    ? 'text-red-500'
+                    : passwordStrength === 2
+                      ? 'text-yellow-600 dark:text-yellow-500'
+                      : 'text-green-600 dark:text-green-500'
                     }`}
                 >
                   {password ? strengthLabels[passwordStrength - 1] || 'Weak' : ''}

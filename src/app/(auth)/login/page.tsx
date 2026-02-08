@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { LoginForm } from '@/components/features/auth/LoginForm'
 import { SocialButton } from '@/components/ui/social-button'
+import { PulseLogo } from '@/components/brand/PulseLogo'
 import { Activity } from 'lucide-react'
 
 export default function LoginPage() {
@@ -14,11 +15,10 @@ export default function LoginPage() {
     <AuthLayout>
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
-          <Activity className="w-5 h-5" />
-        </div>
-        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl font-bold">
-          ConnectHub
+        <PulseLogo width={40} height={40} />
+        <h3 className="text-[#111418] dark:text-white tracking-tight text-xl">
+          <span className="font-bold">Connect</span>
+          <span className="font-normal">Hub</span>
         </h3>
       </div>
 

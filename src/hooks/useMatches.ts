@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/lib/supabase/client';
+import { toast } from 'sonner';
+import { parseApiError, type ParsedApiError } from '@/lib/errorUtils';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -29,7 +31,7 @@ export const useMatches = () => {
     const supabase = createClient();
 
     // Fetch all matches
-    const { data: matches, isLoading, error } = useQuery({
+    const query = useQuery({
         queryKey: ['matches'],
         queryFn: async () => {
             const { data: { session } } = await supabase.auth.getSession();
@@ -41,7 +43,10 @@ export const useMatches = () => {
                 },
             });
 
-            if (!response.ok) throw new Error('Failed to fetch matches');
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || error.detail || 'Failed to fetch matches');
+            }
             const result = await response.json();
             return (result.data?.matches || []) as Match[];
         },
@@ -62,20 +67,34 @@ export const useMatches = () => {
                 body: JSON.stringify({ reason }),
             });
 
-            if (!response.ok) throw new Error('Failed to unmatch');
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || error.detail || 'Failed to unmatch');
+            }
             return response.json();
         },
         onSuccess: (data, variables) => {
             queryClient.setQueryData(['matches'], (old: Match[] | undefined) => {
                 return old?.filter(m => m.id !== variables.matchId) || [];
             });
+            toast.success('Unmatched successfully');
+        },
+        onError: (err: Error) => {
+            toast.error('Failed to unmatch', {
+                description: err.message || 'Please try again',
+            });
         },
     });
 
+    // Parse error for ErrorState component
+    const parsedError: ParsedApiError | null = query.error ? parseApiError(query.error) : null;
+
     return {
-        matches: matches || [],
-        isLoading,
-        error,
+        matches: query.data || [],
+        isLoading: query.isLoading,
+        error: query.error,
+        parsedError,
+        refetch: query.refetch,
         unmatch: unmatchMutation.mutateAsync,
     };
 };

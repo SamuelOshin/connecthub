@@ -8,12 +8,14 @@ import { useConversations } from '@/hooks/useConversations';
 import { ConversationItem } from './ConversationItem';
 import { MessageSquare, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { ErrorState } from '@/components/ui/ErrorState';
+import { getErrorTitle, getErrorVariant } from '@/lib/errorUtils';
 
 /**
  * List of all active conversations.
  */
 export function ConversationList() {
-    const { data, isLoading, error } = useConversations();
+    const { data, isLoading, error, parsedError, refetch } = useConversations();
 
     if (isLoading) {
         return (
@@ -23,17 +25,14 @@ export function ConversationList() {
         );
     }
 
-    if (error) {
+    if (error && parsedError) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                <p>Failed to load conversations</p>
-                <button
-                    onClick={() => window.location.reload()}
-                    className="mt-2 text-primary hover:underline"
-                >
-                    Retry
-                </button>
-            </div>
+            <ErrorState
+                title={getErrorTitle(parsedError.status)}
+                message={parsedError.message}
+                variant={getErrorVariant(parsedError.status)}
+                onRetry={() => refetch()}
+            />
         );
     }
 

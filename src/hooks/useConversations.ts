@@ -6,6 +6,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { createClient } from '@/lib/supabase/client';
+import { parseApiError, type ParsedApiError } from '@/lib/errorUtils';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -35,7 +36,7 @@ interface ConversationsResponse {
 export function useConversations() {
     const supabase = createClient();
 
-    return useQuery({
+    const query = useQuery({
         queryKey: ['conversations'],
         queryFn: async (): Promise<ConversationsResponse> => {
             const { data: { session } } = await supabase.auth.getSession();
@@ -51,12 +52,23 @@ export function useConversations() {
             );
 
             if (!response.ok) {
-                throw new Error('Failed to fetch conversations');
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || error.detail || 'Failed to fetch conversations');
             }
 
-            return response.json();
+            const result = await response.json();
+            return result.data || { conversations: [], total_count: 0 };
         },
         staleTime: 1000 * 10, // 10 seconds
         refetchInterval: 1000 * 15, // Refetch every 15s for near-realtime sidebar
     });
+
+    // Parse error for ErrorState component
+    const parsedError: ParsedApiError | null = query.error ? parseApiError(query.error) : null;
+
+    return {
+        ...query,
+        parsedError,
+    };
 }
+

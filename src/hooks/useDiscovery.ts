@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/lib/supabase/client';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -167,12 +168,20 @@ export const useDiscovery = () => {
                 return old?.filter(p => p.id !== variables.profile_id) || [];
             });
 
-            // If it's a match, we might want to trigger a modal here
+            // If it's a match, update the sidebar badges and matches list
             if (data?.data?.match) {
+                // Invalidate matches list and stats to update sidebar badges immediately
+                queryClient.invalidateQueries({ queryKey: ['matches'] });
+                queryClient.invalidateQueries({ queryKey: ['matchStats'] });
+
                 // Handle match logic (setting state for match modal to open)
-                // This will be handled by the component using the mutation
                 console.log("It's a Match!", data.data.match);
             }
+        },
+        onError: (err: Error) => {
+            toast.error('Swipe failed', {
+                description: err.message || 'Please try again',
+            });
         },
     });
 

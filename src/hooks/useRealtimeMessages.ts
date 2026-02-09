@@ -8,6 +8,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { parseApiError, type ParsedApiError } from '@/lib/errorUtils';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -39,6 +41,10 @@ export interface ReadCursor {
 export interface SendMessageData {
     content: string;
     message_type?: 'text' | 'image' | 'system';
+    /** Client timestamp for offline message ordering (auto-generated if not provided) */
+    client_timestamp?: string;
+    /** Idempotency key to prevent duplicate sends on retry */
+    idempotency_key?: string;
 }
 
 interface MessagesResponse {
@@ -107,7 +113,8 @@ export function useRealtimeMessages(matchId: string) {
                 throw new Error('Failed to fetch messages');
             }
 
-            return response.json() as Promise<MessagesResponse>;
+            const result = await response.json();
+            return (result.data || { messages: [], has_more: false }) as MessagesResponse;
         },
         enabled: !!matchId,
         staleTime: 1000 * 10, // 10 seconds
@@ -120,6 +127,12 @@ export function useRealtimeMessages(matchId: string) {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) throw new Error('Not authenticated');
 
+            // Generate client timestamp if not provided
+            const payload = {
+                ...data,
+                client_timestamp: data.client_timestamp || new Date().toISOString(),
+            };
+
             const response = await fetch(
                 `${API_URL}/chat/${matchId}/messages`,
                 {
@@ -128,16 +141,17 @@ export function useRealtimeMessages(matchId: string) {
                         'Authorization': `Bearer ${session.access_token}`,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(payload),
                 }
             );
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.detail || 'Failed to send message');
+                throw new Error(error.message || error.detail || 'Failed to send message');
             }
 
-            return response.json();
+            const result = await response.json();
+            return result.data as SendMessageResponse;
         },
         onMutate: async (newData) => {
             // Cancel outgoing refetches
@@ -200,6 +214,10 @@ export function useRealtimeMessages(matchId: string) {
             if (context?.previousMessages) {
                 queryClient.setQueryData(['messages', matchId], context.previousMessages);
             }
+            // Show toast error to user
+            toast.error('Message failed to send', {
+                description: err.message || 'Please try again',
+            });
         },
     });
 
@@ -222,6 +240,8 @@ export function useRealtimeMessages(matchId: string) {
 
         // Invalidate conversations to update unread counts
         queryClient.invalidateQueries({ queryKey: ['conversations'] });
+        // Invalidate match stats to update sidebar badge
+        queryClient.invalidateQueries({ queryKey: ['matchStats'] });
     }, [matchId, supabase, queryClient]);
 
     // Subscribe to real-time messages
@@ -249,13 +269,24 @@ export function useRealtimeMessages(matchId: string) {
                         is_mine: currentUserId ? (newMessage as Message).sender_id === currentUserId : false
                     };
 
+                    // Skip if this is our own message - optimistic update already handled it
+                    // This prevents the race condition causing duplicates
+                    if (fullMessage.is_mine) {
+                        return old;
+                    }
+
                     if (!old) return { messages: [fullMessage], has_more: false };
+
+                    // Check if message already exists (by ID)
                     const exists = old.messages.some(m => m.id === fullMessage.id);
                     if (exists) return old;
 
+                    // Also filter out any temp messages with same content (edge case cleanup)
+                    const cleaned = old.messages.filter(m => !m.id.startsWith('temp-'));
+
                     return {
                         ...old,
-                        messages: [...old.messages, fullMessage],
+                        messages: [...cleaned, fullMessage],
                     };
                 }
 
@@ -281,9 +312,18 @@ export function useRealtimeMessages(matchId: string) {
                 return old;
             });
 
-            // Invalidate conversations for unread count + refetch messages as fallback
+            // Invalidate conversations for unread count
             queryClient.invalidateQueries({ queryKey: ['conversations'] });
-            if (payload.eventType === 'INSERT') {
+
+            // Invalidate matchStats to update sidebar badges (unread count)
+            queryClient.invalidateQueries({ queryKey: ['matchStats'] });
+
+            // Only refetch messages if it's from another user (incoming message)
+            // Our own messages are handled by optimistic update + onSuccess
+            const isOwnMessage = currentUserIdRef.current &&
+                (payload.new as Message).sender_id === currentUserIdRef.current;
+
+            if (payload.eventType === 'INSERT' && !isOwnMessage) {
                 // Background refetch to get fully-formatted message from API
                 queryClient.invalidateQueries({ queryKey: ['messages', matchId] });
             }
@@ -351,8 +391,53 @@ export function useRealtimeMessages(matchId: string) {
         };
     }, [matchId, supabase, queryClient]);
 
+    // Deduplicate messages - filter out temp messages if real message exists
+    // This handles race conditions between optimistic updates, realtime, and refetch
+    const deduplicatedMessages = useMemo(() => {
+        const rawMessages = messagesData?.messages || [];
+        if (rawMessages.length === 0) return rawMessages;
+
+        // Get all non-temp message IDs and their content fingerprints
+        const realMessages = new Map<string, Message>();
+        const contentFingerprints = new Set<string>();
+
+        // First pass: collect real messages and their fingerprints
+        for (const msg of rawMessages) {
+            if (!msg.id.startsWith('temp-')) {
+                realMessages.set(msg.id, msg);
+                // Fingerprint: sender + content + time (rounded to minute for fuzzy match)
+                const timeKey = new Date(msg.created_at).toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
+                contentFingerprints.add(`${msg.sender_id}:${msg.content}:${timeKey}`);
+            }
+        }
+
+        // Second pass: filter out temp messages that have matching real messages
+        const result: Message[] = [];
+        const seenIds = new Set<string>();
+
+        for (const msg of rawMessages) {
+            // Skip duplicates by ID
+            if (seenIds.has(msg.id)) continue;
+            seenIds.add(msg.id);
+
+            // For temp messages, check if a real message with same content exists
+            if (msg.id.startsWith('temp-')) {
+                const timeKey = new Date(msg.created_at).toISOString().slice(0, 16);
+                const fingerprint = `${msg.sender_id}:${msg.content}:${timeKey}`;
+                if (contentFingerprints.has(fingerprint)) {
+                    // Skip this temp message - real version exists
+                    continue;
+                }
+            }
+
+            result.push(msg);
+        }
+
+        return result;
+    }, [messagesData?.messages]);
+
     return {
-        messages: messagesData?.messages || [],
+        messages: deduplicatedMessages,
         isLoading,
         error,
         isConnected,

@@ -395,16 +395,67 @@ export const useDiscoveryStore = create((set) => ({
 - Always type function parameters and returns
 
 ### Error Handling
+
+**Page-Level Errors** (query failures - use `ErrorState` component):
 ```typescript
-try {
-  const { data, error } = await supabase.from('table').select()
-  if (error) throw error
-  return data
-} catch (err) {
-  console.error('Failed to fetch:', err)
-  throw err
+import { ErrorState } from '@/components/ui/ErrorState';
+import { getErrorTitle, getErrorVariant } from '@/lib/errorUtils';
+
+export function MyComponent() {
+  const { data, isLoading, error, parsedError, refetch } = useMyHook();
+  
+  if (error && parsedError) {
+    return (
+      <ErrorState
+        title={getErrorTitle(parsedError.status)}
+        message={parsedError.message}  // Actual server error message
+        variant={getErrorVariant(parsedError.status)}
+        onRetry={() => refetch()}  // Use refetch(), NOT window.location.reload()
+      />
+    );
+  }
+  // ...
 }
 ```
+
+**Action Failures** (mutations - use `toast.error`):
+```typescript
+import { toast } from 'sonner';
+
+const mutation = useMutation({
+  mutationFn: async (data) => { /* ... */ },
+  onError: (err: Error) => {
+    toast.error('Action failed', {
+      description: err.message || 'Please try again',
+    });
+  },
+});
+```
+
+**Hook Pattern** (expose `parsedError` for ErrorState):
+```typescript
+import { parseApiError, type ParsedApiError } from '@/lib/errorUtils';
+
+export function useMyData() {
+  const query = useQuery({ /* ... */ });
+  
+  const parsedError: ParsedApiError | null = query.error 
+    ? parseApiError(query.error) 
+    : null;
+  
+  return { ...query, parsedError };
+}
+```
+
+**Error Handling Rules**:
+| Error Type | UI Component | Example |
+|------------|--------------|---------|
+| Network down | `ErrorState` variant="network" | "Connection Lost" |
+| Server 500 | `ErrorState` variant="server" | Actual server message |
+| Mutation failure | `toast.error()` | "Message failed to send" |
+| Validation | Inline form errors | Field-level errors |
+
+> ⚠️ **Never use `window.location.reload()`** - always use `refetch()` from the query.
 
 ### Naming Conventions
 - Components: PascalCase (`SwipeCard.tsx`)

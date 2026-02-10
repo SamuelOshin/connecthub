@@ -1,48 +1,41 @@
 "use client";
 
-import { Heart, Bell, Menu, X } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+"use client";
 
-// Mock User Data
-const USER = {
-  name: "Alex M.",
-  avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80",
-};
+import { PulseLogo } from "@/components/brand/PulseLogo";
+import { UserDropdown } from "./UserDropdown";
+import { useSidebar } from "@/hooks/useSidebar";
 
-export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
+export function Header() {
+  const { toggleMobile } = useSidebar();
+
   return (
-    <header className="h-16 bg-white dark:bg-[#1a242f] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 z-30 shrink-0 sticky top-0">
+    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e5e7eb] dark:border-gray-800 bg-surface-light dark:bg-surface-dark px-6 py-3 z-30 shrink-0 relative h-16">
       <div className="flex items-center gap-3">
-        <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-          <Heart className="w-5 h-5 fill-current" />
-        </div>
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white hidden md:block">
-          ConnectHub
-        </h1>
+        <PulseLogo width={40} height={40} />
+        <h2 className="text-xl leading-tight tracking-tight text-gray-900 dark:text-white hidden lg:block">
+          <span className="font-bold text-primary">Connect</span>
+          <span className="font-normal text-primary">Hub</span>
+        </h2>
         <button
-          className="md:hidden p-1 text-slate-500"
-          onClick={onMenuClick}
+          className="lg:hidden p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+          onClick={toggleMobile}
         >
-          <Menu className="w-6 h-6" />
+          <span className="material-symbols-outlined">menu</span>
         </button>
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white dark:border-[#1a242f]"></span>
+        <button className="flex items-center justify-center rounded-full size-10 bg-[#f0f2f5] dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative">
+          <span className="material-symbols-outlined text-gray-700 dark:text-gray-200" style={{ fontSize: '22px' }}>
+            notifications
+          </span>
+          <span className="absolute top-2 right-2.5 size-2 bg-pink-500 rounded-full border border-white dark:border-gray-800"></span>
         </button>
 
-        <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
+        <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-1 hidden sm:block"></div>
 
-        <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-          <div
-            className="h-9 w-9 rounded-full bg-cover bg-center ring-2 ring-slate-100 dark:ring-slate-700"
-            style={{ backgroundImage: `url('${USER.avatar}')` }}
-          />
-        </div>
+        <UserDropdown />
       </div>
     </header>
   );

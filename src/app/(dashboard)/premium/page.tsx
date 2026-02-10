@@ -1,233 +1,258 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { CheckCircle2, X, Lock, CreditCard, HelpCircle, ArrowRight } from "lucide-react";
+import { useState } from 'react';
+import { useSubscription, SubscriptionPlan } from '@/hooks/useSubscription';
+import { Button } from '@/components/ui/button';
 
-export default function PremiumPage() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+export default function PremiumPlansPage() {
+    const {
+        plans,
+        isLoadingPlans,
+        subscription,
+        currentPlanName,
+        createCheckout,
+        isCreatingCheckout,
+    } = useSubscription();
 
-  return (
-    <div className="overflow-y-auto h-full">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-10">
-      {/* Hero Section */}
-      <div className="mb-12 flex flex-col items-center gap-4 text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[#101418] dark:text-white md:text-5xl">
-          Upgrade Your Dating Life
-        </h1>
-        <p className="max-w-2xl text-lg text-slate-500 dark:text-slate-400">
-          Unlock exclusive features to find your perfect match faster. Choose the plan that fits your journey.
-        </p>
+    const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>('monthly');
+    const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
 
-        {/* Billing Toggle */}
-        <div className="mt-6 flex w-fit rounded-full bg-slate-200 p-1 dark:bg-slate-800">
-          <label className="cursor-pointer">
-            <input
-              type="radio"
-              name="billing"
-              value="monthly"
-              className="peer sr-only"
-              checked={billingCycle === "monthly"}
-              onChange={() => setBillingCycle("monthly")}
-            />
-            <div className="rounded-full px-6 py-2 text-sm font-semibold text-slate-500 transition-all peer-checked:bg-white peer-checked:text-[#101418] peer-checked:shadow-sm dark:peer-checked:bg-primary dark:peer-checked:text-white">
-              Monthly
-            </div>
-          </label>
-          <label className="cursor-pointer">
-            <input
-              type="radio"
-              name="billing"
-              value="yearly"
-              className="peer sr-only"
-              checked={billingCycle === "yearly"}
-              onChange={() => setBillingCycle("yearly")}
-            />
-            <div className="flex items-center gap-2 rounded-full px-6 py-2 text-sm font-semibold text-slate-500 transition-all peer-checked:bg-white peer-checked:text-[#101418] peer-checked:shadow-sm dark:peer-checked:bg-primary dark:peer-checked:text-white">
-              Yearly <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] text-green-700 dark:bg-green-900 dark:text-green-300">Save 20%</span>
-            </div>
-          </label>
-        </div>
-      </div>
+    const getPrice = (plan: SubscriptionPlan) => {
+        if (plan.name === 'basic') return 'Free';
+        const price = billingInterval === 'monthly'
+            ? plan.price_monthly
+            : (plan.price_yearly / 12);
+        return `$${price.toFixed(2)}`;
+    };
 
-      {/* Pricing Cards */}
-      <div className="mb-16 grid grid-cols-1 items-start gap-6 md:grid-cols-3 lg:gap-8">
-        {/* Basic Plan */}
-        <div className="group relative flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-[#1a2733]">
-          <div className="mb-5">
-            <h3 className="mb-2 text-lg font-bold text-[#101418] dark:text-white">Basic</h3>
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-black tracking-tight text-[#101418] dark:text-white">Free</span>
-              <span className="text-slate-500 font-medium dark:text-slate-400">forever</span>
-            </div>
-          </div>
-          <button className="mb-6 w-full cursor-default rounded-full bg-slate-100 py-3 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
-            Current Plan
-          </button>
-          <div className="flex-1 space-y-4">
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Standard matching</span>
-            </div>
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Limited swipes (50/day)</span>
-            </div>
-            <div className="flex gap-3 text-sm text-slate-400 decoration-slate-400/50 line-through dark:text-slate-600">
-              <X className="w-5 h-5 text-slate-300 dark:text-slate-600" />
-              <span>See who likes you</span>
-            </div>
-          </div>
-        </div>
+    const getPriceLabel = (plan: SubscriptionPlan) => {
+        if (plan.name === 'basic') return 'forever';
+        return '/mo';
+    };
 
-        {/* Premium Plan */}
-        <div className="group relative z-10 flex transform flex-col rounded-xl border-2 border-primary bg-white p-6 shadow-xl shadow-primary/10 dark:bg-[#1a2733] md:-translate-y-4">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold tracking-wide text-white uppercase shadow-sm">
-            Most Popular
-          </div>
-          <div className="mb-5">
-            <h3 className="mb-2 text-lg font-bold text-primary">Premium</h3>
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-black tracking-tight text-[#101418] dark:text-white">$19.99</span>
-              <span className="text-slate-500 font-medium dark:text-slate-400">/mo</span>
-            </div>
-          </div>
-          <button className="mb-6 w-full rounded-full bg-primary py-3 text-sm font-bold text-white shadow-lg shadow-primary/25 transition-all hover:bg-blue-600 hover:shadow-primary/40">
-            Select Premium
-          </button>
-          <div className="flex-1 space-y-4">
-            <div className="flex gap-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Unlimited Swipes</span>
-            </div>
-            <div className="flex gap-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>See Who Likes You</span>
-            </div>
-            <div className="flex gap-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>5 Super Likes per week</span>
-            </div>
-            <div className="flex gap-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Advanced Filters</span>
-            </div>
-          </div>
-        </div>
+    const handleSelectPlan = async (plan: SubscriptionPlan) => {
+        if (plan.name === 'basic' || plan.name === currentPlanName) return;
 
-        {/* Elite Plan */}
-        <div className="group relative flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-[#1a2733]">
-          <div className="mb-5">
-            <h3 className="mb-2 text-lg font-bold text-[#101418] dark:text-white">Elite</h3>
-            <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-black tracking-tight text-[#101418] dark:text-white">$39.99</span>
-              <span className="text-slate-500 font-medium dark:text-slate-400">/mo</span>
-            </div>
-          </div>
-          <button className="mb-6 w-full rounded-full border border-slate-200 bg-slate-50 py-3 text-sm font-bold text-[#101418] transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">
-            Select Elite
-          </button>
-          <div className="flex-1 space-y-4">
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Everything in Premium</span>
-            </div>
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Priority Placement</span>
-            </div>
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>1 Monthly Profile Boost</span>
-            </div>
-            <div className="flex gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Read Receipts</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        setProcessingPlanId(plan.id);
+        try {
+            const result = await createCheckout({
+                planId: plan.id,
+                billingInterval,
+            });
 
-      {/* Checkout Form */}
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8 flex items-center gap-2 border-b border-slate-200 px-4 pb-6 dark:border-slate-800">
-          <Lock className="w-6 h-6 text-primary" />
-          <h2 className="text-xl font-bold text-[#101418] dark:text-white">Secure Checkout</h2>
-        </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2733] md:p-8">
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Card Number</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  className="block w-full rounded-lg border-slate-300 bg-white py-3 pl-12 text-[#101418] shadow-sm focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                  placeholder="0000 0000 0000 0000"
-                />
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <CreditCard className="text-slate-400 w-5 h-5" />
+            if (result.checkout_url) {
+                // In production, redirect to Stripe
+                window.open(result.checkout_url, '_blank');
+            }
+        } catch (error) {
+            console.error('Checkout failed:', error);
+        } finally {
+            setProcessingPlanId(null);
+        }
+    };
+
+    const isCurrentPlan = (plan: SubscriptionPlan) => plan.name === currentPlanName;
+
+    if (isLoadingPlans) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+            <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-10">
+                {/* Hero Section */}
+                <div className="mb-12 flex flex-col items-center gap-4 text-center">
+                    <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-5xl">
+                        Upgrade Your Dating Life
+                    </h1>
+                    <p className="max-w-2xl text-lg text-gray-500 dark:text-gray-400">
+                        Unlock exclusive features to find your perfect match faster. Choose the plan that fits your journey.
+                    </p>
+
+                    {/* Billing Toggle */}
+                    <div className="mt-6 flex w-fit rounded-full bg-gray-200 p-1 dark:bg-gray-800">
+                        <label className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="billing"
+                                value="monthly"
+                                checked={billingInterval === 'monthly'}
+                                onChange={() => setBillingInterval('monthly')}
+                                className="peer sr-only"
+                            />
+                            <div className="rounded-full px-6 py-2 text-sm font-semibold text-gray-500 transition-all peer-checked:bg-white peer-checked:text-gray-900 peer-checked:shadow-sm dark:peer-checked:bg-primary dark:peer-checked:text-white">
+                                Monthly
+                            </div>
+                        </label>
+                        <label className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="billing"
+                                value="yearly"
+                                checked={billingInterval === 'yearly'}
+                                onChange={() => setBillingInterval('yearly')}
+                                className="peer sr-only"
+                            />
+                            <div className="flex items-center gap-2 rounded-full px-6 py-2 text-sm font-semibold text-gray-500 transition-all peer-checked:bg-white peer-checked:text-gray-900 peer-checked:shadow-sm dark:peer-checked:bg-primary dark:peer-checked:text-white">
+                                Yearly
+                                <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] text-green-700 dark:bg-green-900 dark:text-green-300">
+                                    Save 20%
+                                </span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
-                <div className="absolute inset-y-0 right-0 flex items-center gap-2 pr-3">
-                  <div className="h-5 w-8 rounded-sm bg-gradient-to-br from-orange-400 to-red-500 opacity-50"></div>
-                  <div className="h-5 w-8 rounded-sm bg-blue-600 opacity-50"></div>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Expiration</label>
-                <input
-                  type="text"
-                  className="block w-full rounded-lg border-slate-300 bg-white px-4 py-3 text-[#101418] shadow-sm focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                  placeholder="MM / YY"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">CVC</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    className="block w-full rounded-lg border-slate-300 bg-white px-4 py-3 text-[#101418] shadow-sm focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                    placeholder="123"
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                    <HelpCircle className="text-sm text-slate-400 w-4 h-4" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Zip Code</label>
-              <input
-                type="text"
-                className="block w-full rounded-lg border-slate-300 bg-white px-4 py-3 text-[#101418] shadow-sm focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                placeholder="12345"
-              />
-            </div>
-            <button
-              type="submit"
-              className="group mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-primary py-4 text-lg font-bold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-blue-600"
-            >
-              <span>Upgrade Now</span>
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
-            <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">
-              By clicking &quot;Upgrade Now&quot;, you agree to our <a href="#" className="underline hover:text-primary">Terms</a> and <a href="#" className="underline hover:text-primary">Privacy Policy</a>. Your subscription will renew automatically.
-            </p>
-          </form>
-        </div>
-        <div className="mt-8 flex justify-center gap-6 opacity-70 grayscale dark:text-slate-600">
-          <div className="h-6 w-12 rounded bg-current"></div>
-          <div className="h-6 w-12 rounded bg-current"></div>
-          <div className="h-6 w-12 rounded bg-current"></div>
-        </div>
-      </div>
 
-      <div className="mt-16 border-t border-slate-200 py-6 text-center dark:border-slate-800">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          © 2023 ConnectHub. All rights reserved.
-        </p>
-      </div>
-    </div>
-    </div>
-  );
+                {/* Plan Cards */}
+                <div className="mb-16 grid grid-cols-1 items-start gap-6 md:grid-cols-3 lg:gap-8">
+                    {plans.map((plan) => (
+                        <div
+                            key={plan.id}
+                            className={`group relative flex flex-col rounded-xl p-6 shadow-sm transition-all ${plan.name === 'premium'
+                                ? 'z-10 border-2 border-primary bg-surface-light shadow-xl shadow-primary/10 dark:bg-surface-dark md:-translate-y-4'
+                                : 'border border-gray-200 bg-surface-light hover:shadow-md dark:border-gray-800 dark:bg-surface-dark'
+                                }`}
+                        >
+                            {/* Most Popular Badge */}
+                            {plan.name === 'premium' && (
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
+                                    Most Popular
+                                </div>
+                            )}
+
+                            {/* Plan Name & Price */}
+                            <div className="mb-5">
+                                <h3 className={`mb-2 text-lg font-bold ${plan.name === 'premium' ? 'text-primary' : 'text-gray-900 dark:text-white'
+                                    }`}>
+                                    {plan.display_name}
+                                </h3>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+                                        {getPrice(plan)}
+                                    </span>
+                                    <span className="font-medium text-gray-500 dark:text-gray-400">
+                                        {getPriceLabel(plan)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* CTA Button */}
+                            {isCurrentPlan(plan) ? (
+                                <Button
+                                    variant="outline"
+                                    className="mb-6 w-full cursor-default rounded-full bg-gray-100 py-3 text-sm font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+                                    disabled
+                                >
+                                    Current Plan
+                                </Button>
+                            ) : plan.name === 'basic' ? (
+                                <Button
+                                    variant="outline"
+                                    className="mb-6 w-full rounded-full py-3 text-sm font-bold"
+                                    disabled
+                                >
+                                    Free Forever
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={() => handleSelectPlan(plan)}
+                                    disabled={processingPlanId !== null}
+                                    className={`mb-6 w-full rounded-full py-3 text-sm font-bold transition-all ${plan.name === 'premium'
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-blue-600'
+                                        : 'border border-gray-200 bg-gray-50 text-gray-900 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'
+                                        }`}
+                                >
+                                    {processingPlanId === plan.id ? 'Loading...' : `Select ${plan.display_name}`}
+                                </Button>
+                            )}
+
+                            {/* Features List */}
+                            <div className="flex-1 space-y-4">
+                                {plan.features.map((feature, index) => {
+                                    const isExcluded = feature.toLowerCase().includes('see who likes') && !plan.has_see_likes;
+                                    return (
+                                        <div
+                                            key={index}
+                                            className={`flex gap-3 text-sm ${isExcluded
+                                                ? 'text-gray-400 line-through decoration-gray-400/50 dark:text-gray-600'
+                                                : plan.name === 'premium'
+                                                    ? 'font-medium text-gray-700 dark:text-gray-200'
+                                                    : 'text-gray-600 dark:text-gray-300'
+                                                }`}
+                                        >
+                                            <span className={`material-symbols-outlined text-[20px] ${isExcluded
+                                                ? 'text-gray-300 dark:text-gray-600'
+                                                : 'text-primary'
+                                                }`}>
+                                                {isExcluded ? 'cancel' : 'check_circle'}
+                                            </span>
+                                            <span>{feature}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Current Subscription Info */}
+                {subscription && subscription.plan.name !== 'basic' && (
+                    <div className="mx-auto max-w-2xl mb-16">
+                        <div className="rounded-xl border border-gray-200 bg-surface-light p-6 shadow-sm dark:border-gray-800 dark:bg-surface-dark">
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className="material-symbols-outlined text-primary">verified</span>
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                    Your Subscription
+                                </h2>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p className="text-gray-500 dark:text-gray-400">Plan</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white">
+                                        {subscription.plan.display_name}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-gray-500 dark:text-gray-400">Status</p>
+                                    <p className={`font-semibold ${subscription.status === 'active'
+                                        ? 'text-green-600'
+                                        : 'text-amber-600'
+                                        }`}>
+                                        {subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
+                                    </p>
+                                </div>
+                                {subscription.billing_interval && (
+                                    <div>
+                                        <p className="text-gray-500 dark:text-gray-400">Billing</p>
+                                        <p className="font-semibold text-gray-900 dark:text-white">
+                                            {subscription.billing_interval.charAt(0).toUpperCase() + subscription.billing_interval.slice(1)}
+                                        </p>
+                                    </div>
+                                )}
+                                {subscription.current_period_end && (
+                                    <div>
+                                        <p className="text-gray-500 dark:text-gray-400">Renews</p>
+                                        <p className="font-semibold text-gray-900 dark:text-white">
+                                            {new Date(subscription.current_period_end).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Footer */}
+                <div className="border-t border-gray-200 py-6 text-center dark:border-gray-800">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                        © 2026 ConnectHub. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
 }

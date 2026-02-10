@@ -27,11 +27,11 @@ export function MatchGrid({ profiles }: { profiles: MatchProfile[] }) {
           </select>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {profiles.map((profile) => (
           <div key={profile.id} className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 cursor-pointer shadow-sm hover:shadow-glow transition-all duration-300">
-            <div 
+            <div
               className={cn(
                 "absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110",
                 profile.status === "Offline" && "grayscale"
@@ -39,7 +39,7 @@ export function MatchGrid({ profiles }: { profiles: MatchProfile[] }) {
               style={{ backgroundImage: `url('${profile.image}')` }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-            
+
             {/* Status Badge */}
             {profile.status === "Online" && (
               <div className="absolute top-3 left-3 px-2.5 py-1 bg-green-500/90 backdrop-blur-sm rounded-lg text-[10px] font-bold text-white uppercase tracking-wide shadow-sm">
@@ -56,7 +56,7 @@ export function MatchGrid({ profiles }: { profiles: MatchProfile[] }) {
                 <Star className="w-3 h-3 fill-current" /> Super Like
               </div>
             )}
-            
+
             {/* Super Like Star Indicator (Hidden until hover) */}
             <div className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center bg-blue-500 text-white rounded-full shadow-lg transform translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
               <Star className="w-4 h-4 fill-current" />

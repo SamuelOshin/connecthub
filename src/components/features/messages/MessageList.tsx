@@ -56,6 +56,8 @@ export function MessageList({
             {chats.map((chat) => (
               <div
                 key={chat.id}
+              <div
+                key={chat.id}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-colors relative",
                   selectedId === chat.id
@@ -78,6 +80,7 @@ export function MessageList({
                     <div className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-surface-dark rounded-full"></div>
                   )}
                 </div>
+
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-baseline mb-0.5">

@@ -1,297 +1,299 @@
 /**
- * Profile page with photo management and profile editing.
- * Desktop-first 2-column layout: Photos (left) + Profile info (right)
+ * Profile page —   premium view-only layout with hero gradient,
+ * profile card depth, and polished micro-interactions.
+ * Pencil FAB navigates to /profile/edit.
  */
 
 'use client'
 
-import { useState, useEffect } from 'react'
 import { PhotoUpload } from '@/components/features/profile/PhotoUpload'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { useProfile } from '@/hooks/useProfile'
-
-const INTERESTS = [
-    { label: 'Hiking', id: 'hiking' },
-    { label: 'Sushi', id: 'sushi' },
-    { label: 'Indie Rock', id: 'indie-rock' },
-    { label: 'Travel', id: 'travel' },
-    { label: 'Photography', id: 'photography' },
-    { label: 'Coffee', id: 'coffee' },
-    { label: 'Gaming', id: 'gaming' },
-    { label: 'Fitness', id: 'fitness' },
-    { label: 'Art', id: 'art' },
-    { label: 'Cooking', id: 'cooking' },
-];
 
 export default function ProfilePage() {
     const router = useRouter()
-    const { user } = useAuth() // Still use auth for session check if needed
-    const { data: profile, isLoading, isUsingMock, updateProfile } = useProfile()
-
-    // UI state
-    const [activeTab, setActiveTab] = useState<'preview' | 'edit'>('edit')
-
-    // Local state for editing - sync with profile data
-    const [aboutMe, setAboutMe] = useState("")
-    const [interests, setInterests] = useState<string[]>([])
-    const [prompts, setPrompts] = useState<{ question: string, answer: string }[]>([])
-
-    // Sync local state when profile loads
-    useEffect(() => {
-        if (profile) {
-            setAboutMe(profile.bio || "")
-            setInterests(profile.passions || [])
-            setPrompts(profile.prompts || [])
-        }
-    }, [profile])
+    const { user } = useAuth()
+    const { data: profile, isLoading, isUsingMock } = useProfile()
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <span className="material-symbols-outlined text-4xl text-primary animate-spin">progress_activity</span>
+            <div className="flex items-center justify-center h-full bg-[#f5f7f8] dark:bg-[#0f1923]">
+                <div className="relative">
+                    <div className="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+                    <span className="absolute inset-0 flex items-center justify-center material-symbols-outlined text-primary text-xl icon-filled">person</span>
+                </div>
             </div>
         )
     }
 
-    const handleSaveAboutMe = () => {
-        updateProfile({ bio: aboutMe })
-    }
-
-    const removeInterest = (id: string) => {
-        const newInterests = interests.filter(i => i !== id)
-        setInterests(newInterests)
-        updateProfile({ passions: newInterests })
-    }
-
-    const addInterest = (id: string) => {
-        if (!interests.includes(id)) {
-            const newInterests = [...interests, id]
-            setInterests(newInterests)
-            updateProfile({ passions: newInterests })
-        }
-    }
-
-    const handlePromptChange = (index: number, field: 'question' | 'answer', value: string) => {
-        const newPrompts = [...prompts];
-        if (!newPrompts[index]) {
-            newPrompts[index] = { question: 'A fun fact about me is...', answer: '' };
-        }
-        newPrompts[index][field] = value;
-        setPrompts(newPrompts);
-    }
-
-    const handlePromptSave = () => {
-        updateProfile({ prompts })
-    }
+    const completionItems = [
+        { done: !!profile?.display_name, label: 'Name' },
+        { done: !!profile?.bio, label: 'Bio' },
+        { done: !!profile?.gender, label: 'Gender' },
+        { done: (profile?.prompts?.length ?? 0) > 0, label: 'Prompts' },
+        { done: (profile?.passions?.length ?? 0) > 0, label: 'Passions' },
+        { done: !!profile?.primary_photo_url, label: 'Photo' },
+    ]
+    const completionCount = completionItems.filter(i => i.done).length
+    const completionPct = Math.round((completionCount / completionItems.length) * 100)
 
     return (
         <div className="h-full overflow-y-auto bg-[#f5f7f8] dark:bg-[#0f1923]">
-            {/* Page Header */}
-            <div className="bg-surface-light dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800 px-4 sm:px-8 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-10">
-                <div className="flex items-center gap-4">
-                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">Edit Profile</h1>
-                    {isUsingMock && (
-                        <span className="px-3 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 text-xs font-bold rounded-full flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]">offline_bolt</span>
-                            <span className="hidden sm:inline">Offline Mode</span>
-                            <span className="sm:hidden">Offline</span>
-                        </span>
-                    )}
-                </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <Button
-                        variant="outline"
-                        className="rounded-xl flex-1 sm:flex-none items-center justify-center gap-2 h-10 sm:h-auto"
-                        onClick={() => router.push('/profile/preview')}
-                    >
-                        <span className="material-symbols-outlined text-[18px]">visibility</span>
-                        <span className="hidden sm:inline">View Public Profile</span>
-                        <span className="sm:hidden">Preview</span>
-                    </Button>
-                    <button className="relative p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hidden sm:block">
-                        <span className="material-symbols-outlined text-[24px]">notifications</span>
-                        <span className="absolute top-1 right-1 size-2 bg-pink-500 rounded-full"></span>
-                    </button>
+
+            {/* ─── Hero Gradient Header ─── */}
+            <div className="relative overflow-hidden">
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary via-blue-600 to-indigo-700 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-950" />
+                {/* Decorative blobs */}
+                <div className="absolute top-[-40%] right-[-20%] w-80 h-80 bg-white/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-[-30%] left-[-15%] w-64 h-64 bg-blue-400/20 rounded-full blur-3xl" />
+
+                <div className="relative px-4 sm:px-8 pt-6 pb-16 sm:pb-20">
+                    {/* Top bar */}
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">My Profile</h1>
+                            {isUsingMock && (
+                                <span className="px-2.5 py-1 bg-white/15 backdrop-blur-sm text-white text-xs font-semibold rounded-full flex items-center gap-1.5 border border-white/20">
+                                    <span className="material-symbols-outlined text-[13px]">cloud_off</span>
+                                    Offline
+                                </span>
+                            )}
+                        </div>
+                        <button
+                            onClick={() => router.push('/profile/edit')}
+                            className="group flex items-center gap-2 px-4 py-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 rounded-xl text-white text-sm font-semibold transition-all duration-200"
+                        >
+                            <span className="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform duration-200">edit</span>
+                            Edit Profile
+                        </button>
+                    </div>
+
+                    {/* Profile identity */}
+                    <div className="flex items-center gap-4">
+                        {/* Avatar */}
+                        <div className="relative">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 overflow-hidden flex items-center justify-center shadow-xl">
+                                {profile?.primary_photo_url ? (
+                                    <img src={profile.primary_photo_url} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="material-symbols-outlined text-white/70 text-4xl sm:text-5xl">person</span>
+                                )}
+                            </div>
+                            {profile?.is_verified && (
+                                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                    <span className="material-symbols-outlined text-primary text-[18px] icon-filled">verified</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                            <h2 className="text-2xl sm:text-3xl font-extrabold text-white truncate">
+                                {profile?.display_name || 'Your Name'}
+                                {profile?.age ? <span className="font-normal opacity-80">, {profile.age}</span> : null}
+                            </h2>
+                            <p className="text-sm text-white/70 mt-0.5 capitalize">
+                                {profile?.gender || 'Not specified'}
+                            </p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <span className="text-xs text-white/60 font-medium">Profile {completionPct}% complete</span>
+                                <div className="flex-1 max-w-[120px] h-1.5 bg-white/15 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-gradient-to-r from-green-400 to-emerald-400 rounded-full transition-all duration-700"
+                                        style={{ width: `${completionPct}%` }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Main Content - Responsive 2 Column Layout */}
-            <div className="p-4 sm:p-8 pb-24 sm:pb-8">
+            {/* ─── Main Content — overlaps hero ─── */}
+            <div className="relative -mt-8 sm:-mt-10 px-4 sm:px-8 pb-24 sm:pb-8">
                 <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-6xl mx-auto">
-                    {/* Left Column - Photos */}
+
+                    {/* ── Left Column — Photos ── */}
                     <div className="w-full lg:w-[400px] shrink-0 order-2 lg:order-1">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Profile Photos</h2>
-                            <span className="text-xs text-gray-500">Drag to reorder</span>
+                        <div className="bg-white dark:bg-[#1a2332] rounded-2xl p-5 sm:p-6 shadow-lg dark:shadow-black/20 border border-gray-100 dark:border-gray-800/50">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-white text-[16px]">photo_library</span>
+                                    </div>
+                                    <h2 className="text-base font-bold text-gray-900 dark:text-white">Photos</h2>
+                                </div>
+                                <span className="text-xs text-gray-400 font-medium">Drag to reorder</span>
+                            </div>
+                            <PhotoUpload />
                         </div>
-                        <PhotoUpload />
                     </div>
 
-                    {/* Right Column - Profile Info */}
-                    <div className="flex-1 min-w-0 order-1 lg:order-2">
-                        {/* Name & Location */}
-                        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 shadow-soft mb-6">
-                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
-                                <div>
-                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                        {profile?.display_name || 'User'}, {profile?.age || 25}
-                                        {profile?.is_verified && (
-                                            <span className="material-symbols-outlined text-primary text-[20px] sm:text-[22px] icon-filled">verified</span>
-                                        )}
-                                    </h2>
-                                    <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                                        <span className="material-symbols-outlined text-[16px]">location_on</span>
-                                        {/* Fallback for location until API provides it */}
-                                        San Francisco, CA
-                                    </p>
-                                </div>
-                                <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 self-start">
-                                    <button
-                                        onClick={() => setActiveTab('preview')}
-                                        className={cn(
-                                            "px-3 sm:px-4 py-1.5 sm:py-2 text-sm font-medium transition-colors flex-1 sm:flex-none",
-                                            activeTab === 'preview'
-                                                ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                                                : "bg-transparent text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                        )}
-                                    >
-                                        Preview
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab('edit')}
-                                        className={cn(
-                                            "px-3 sm:px-4 py-1.5 sm:py-2 text-sm font-medium transition-colors flex-1 sm:flex-none",
-                                            activeTab === 'edit'
-                                                ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                                                : "bg-transparent text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                        )}
-                                    >
-                                        Edit
-                                    </button>
-                                </div>
-                            </div>
+                    {/* ── Right Column — Profile Details ── */}
+                    <div className="flex-1 min-w-0 order-1 lg:order-2 space-y-5">
 
-                            {/* About Me */}
-                            <div className="mb-2">
-                                <div className="flex items-center justify-between mb-2">
-                                    <label className="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
-                                        <span className="material-symbols-outlined text-[18px]">edit_note</span>
-                                        ABOUT ME
-                                    </label>
-                                    <span className="text-xs text-gray-400">{aboutMe.length}/500</span>
-                                </div>
-                                <textarea
-                                    value={aboutMe}
-                                    onChange={(e) => setAboutMe(e.target.value)}
-                                    onBlur={handleSaveAboutMe}
-                                    maxLength={500}
-                                    rows={4}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-                                    placeholder="Tell others about yourself..."
-                                />
-                            </div>
-                        </div>
-
-                        {/* Profile Prompts */}
-                        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 shadow-soft mb-6">
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className="material-symbols-outlined text-primary text-[20px]">quiz</span>
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Profile Prompts</h3>
-                            </div>
-
-                            {/* Prompt 1 */}
-                            <div className="mb-4">
-                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                                    {prompts[0]?.question || "A fun fact about me is..."}
-                                </label>
-                                <div className="relative">
-                                    <textarea
-                                        rows={2}
-                                        value={prompts[0]?.answer || ""}
-                                        onChange={(e) => handlePromptChange(0, 'answer', e.target.value)}
-                                        onBlur={handlePromptSave}
-                                        className="w-full px-4 py-3 pr-12 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-                                    />
-                                    <button className="absolute right-3 top-3 text-primary hover:text-blue-600 transition-colors">
-                                        <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Prompt 2 */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                                    {prompts[1]?.question || "Two truths and a lie"}
-                                </label>
-                                <div className="relative">
-                                    <textarea
-                                        rows={3}
-                                        value={prompts[1]?.answer || ""}
-                                        onChange={(e) => handlePromptChange(1, 'answer', e.target.value)}
-                                        onBlur={handlePromptSave}
-                                        placeholder="1. ...&#10;2. ...&#10;3. ..."
-                                        className="w-full px-4 py-3 pr-12 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none placeholder:text-gray-400"
-                                    />
-                                    <button className="absolute right-3 top-3 text-primary hover:text-blue-600 transition-colors">
-                                        <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Passions & Interests */}
-                        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 shadow-soft">
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className="material-symbols-outlined text-pink-500 text-[20px]">favorite</span>
-                                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
-                                    Passions & Interests
-                                </h3>
-                            </div>
-
-                            <div className="flex flex-wrap gap-2">
-                                {INTERESTS.filter(i => interests.includes(i.id)).map((interest) => (
-                                    <span
-                                        key={interest.id}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300"
-                                    >
-                                        {interest.label}
-                                        <button
-                                            onClick={() => removeInterest(interest.id)}
-                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                                        >
-                                            <span className="material-symbols-outlined text-[16px]">close</span>
-                                        </button>
-                                    </span>
-                                ))}
-
-                                {/* Add More Button - Could be a dropdown or modal in full implementation */}
-                                <div className="relative group">
-                                    <button className="inline-flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-full text-sm font-medium text-gray-500 hover:border-primary hover:text-primary transition-colors">
-                                        <span className="material-symbols-outlined text-[16px]">add</span>
-                                        Add More
-                                    </button>
-
-                                    {/* Simple dropdown for demo purposes */}
-                                    <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 hidden group-hover:block z-10 max-h-60 overflow-y-auto">
-                                        {INTERESTS.filter(i => !interests.includes(i.id)).map(interest => (
-                                            <button
-                                                key={interest.id}
-                                                onClick={() => addInterest(interest.id)}
-                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 first:rounded-t-xl last:rounded-b-xl"
-                                            >
-                                                {interest.label}
-                                            </button>
-                                        ))}
+                        {/* About Me Card */}
+                        <div className="bg-white dark:bg-[#1a2332] rounded-2xl p-5 sm:p-6 shadow-lg dark:shadow-black/20 border border-gray-100 dark:border-gray-800/50">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-white text-[16px]">edit_note</span>
                                     </div>
+                                    <h3 className="text-base font-bold text-gray-900 dark:text-white">About Me</h3>
+                                </div>
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-200"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                                </button>
+                            </div>
+                            {profile?.bio ? (
+                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{profile.bio}</p>
+                            ) : (
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="w-full py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 hover:border-primary hover:text-primary transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">add</span>
+                                    Add a bio to introduce yourself
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Prompts Card */}
+                        <div className="bg-white dark:bg-[#1a2332] rounded-2xl p-5 sm:p-6 shadow-lg dark:shadow-black/20 border border-gray-100 dark:border-gray-800/50">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-white text-[16px]">quiz</span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-gray-900 dark:text-white">Profile Prompts</h3>
+                                </div>
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-200"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                                </button>
+                            </div>
+
+                            {profile?.prompts && profile.prompts.length > 0 ? (
+                                <div className="space-y-3">
+                                    {profile.prompts.map((p, idx) => (
+                                        <div key={idx} className="rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-800/30 p-4 border border-gray-100 dark:border-gray-700/50">
+                                            <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1.5">{p.question}</p>
+                                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                {p.answer || <span className="italic text-gray-400">No answer yet</span>}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="w-full py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 hover:border-primary hover:text-primary transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">add</span>
+                                    Add prompts to stand out
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Passions Card */}
+                        <div className="bg-white dark:bg-[#1a2332] rounded-2xl p-5 sm:p-6 shadow-lg dark:shadow-black/20 border border-gray-100 dark:border-gray-800/50">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-white text-[16px] icon-filled">favorite</span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-gray-900 dark:text-white">Passions & Interests</h3>
+                                </div>
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-200"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                                </button>
+                            </div>
+
+                            {profile?.passions && profile.passions.length > 0 ? (
+                                <div className="flex flex-wrap gap-2">
+                                    {profile.passions.map((passion, idx) => (
+                                        <span
+                                            key={passion}
+                                            className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 text-pink-700 dark:text-pink-300 border border-pink-200/50 dark:border-pink-800/30"
+                                            style={{ animationDelay: `${idx * 50}ms` }}
+                                        >
+                                            {passion}
+                                        </span>
+                                    ))}
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="w-full py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 hover:border-pink-400 hover:text-pink-500 transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">add</span>
+                                    Add interests to find better matches
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Discovery Preferences Summary Card */}
+                        <div className="bg-white dark:bg-[#1a2332] rounded-2xl p-5 sm:p-6 shadow-lg dark:shadow-black/20 border border-gray-100 dark:border-gray-800/50">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-white text-[16px]">tune</span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-gray-900 dark:text-white">Discovery Preferences</h3>
+                                </div>
+                                <button
+                                    onClick={() => router.push('/profile/edit')}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all duration-200"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="rounded-xl bg-gray-50 dark:bg-gray-800/50 p-4 text-center border border-gray-100 dark:border-gray-700/50">
+                                    <span className="material-symbols-outlined text-teal-500 text-[22px] mb-1 block">calendar_month</span>
+                                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                        {profile?.preferences?.min_age ?? 18} – {profile?.preferences?.max_age ?? 50}
+                                    </p>
+                                    <p className="text-xs text-gray-400 font-medium mt-0.5">Age Range</p>
+                                </div>
+                                <div className="rounded-xl bg-gray-50 dark:bg-gray-800/50 p-4 text-center border border-gray-100 dark:border-gray-700/50">
+                                    <span className="material-symbols-outlined text-teal-500 text-[22px] mb-1 block">location_on</span>
+                                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                        {profile?.preferences?.distance_km ?? 50} km
+                                    </p>
+                                    <p className="text-xs text-gray-400 font-medium mt-0.5">Max Distance</p>
+                                </div>
+                                <div className="rounded-xl bg-gray-50 dark:bg-gray-800/50 p-4 text-center border border-gray-100 dark:border-gray-700/50">
+                                    <span className="material-symbols-outlined text-teal-500 text-[22px] mb-1 block">group</span>
+                                    <p className="text-lg font-bold text-gray-900 dark:text-white capitalize">
+                                        {profile?.preferences?.show_me?.join(', ') ?? 'Everyone'}
+                                    </p>
+                                    <p className="text-xs text-gray-400 font-medium mt-0.5">Interested In</p>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
+
+            {/* ─── Floating Edit FAB (Mobile) ─── */}
+            <button
+                onClick={() => router.push('/profile/edit')}
+                className="fixed bottom-24 right-6 lg:hidden w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-white shadow-xl shadow-primary/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-200 z-10"
+            >
+                <span className="material-symbols-outlined text-[24px]">edit</span>
+            </button>
         </div>
     )
 }

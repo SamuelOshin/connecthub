@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart } from "lucide-react";
+import { PulseLogo } from "@/components/brand/PulseLogo";
 
 interface Testimonial {
   quote: string;
@@ -48,7 +48,7 @@ export function AuthLayout({
             </p>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center backdrop-blur-sm border border-white/10">
-                <Heart className="text-white w-5 h-5 fill-current" />
+                <PulseLogo width={24} height={24} className="text-white" />
               </div>
               <div>
                 <p className="text-white font-semibold">{testimonial.author}</p>

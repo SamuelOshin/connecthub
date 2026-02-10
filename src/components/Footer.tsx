@@ -1,5 +1,5 @@
-import { Users } from "lucide-react";
 import Link from "next/link";
+import { PulseLogo } from "@/components/brand/PulseLogo";
 
 export function Footer() {
   return (
@@ -8,8 +8,11 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 lg:col-span-2 flex flex-col gap-4 pr-8">
             <div className="flex items-center gap-2 text-white mb-2">
-              <Users className="w-8 h-8" />
-              <h2 className="text-xl font-bold tracking-tight">ConnectHub</h2>
+              <PulseLogo width={32} height={32} />
+              <h2 className="text-xl tracking-tight">
+                <span className="font-bold">Connect</span>
+                <span className="font-normal">Hub</span>
+              </h2>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
               ConnectHub is the leading platform for meaningful connections. We are dedicated to providing a safe, inclusive, and enjoyable dating experience for everyone.
@@ -17,7 +20,7 @@ export function Footer() {
             <div className="flex gap-4 mt-2">
               {["fb", "tw", "ig"].map(social => (
                 <Link key={social} href="#" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                    <span className="font-bold text-xs">{social}</span>
+                  <span className="font-bold text-xs">{social}</span>
                 </Link>
               ))}
             </div>
@@ -53,7 +56,7 @@ export function Footer() {
 
           <div className="flex flex-col gap-4">
             <h4 className="text-white font-bold">Resources</h4>
-             <ul className="flex flex-col gap-2 text-sm">
+            <ul className="flex flex-col gap-2 text-sm">
               {[
                 { label: "Safety Tips", href: "/safety" },
                 { label: "Community Guidelines", href: "#" },

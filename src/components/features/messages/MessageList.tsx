@@ -56,8 +56,6 @@ export function MessageList({
             {chats.map((chat) => (
               <div
                 key={chat.id}
-              <div
-                key={chat.id}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-colors relative",
                   selectedId === chat.id

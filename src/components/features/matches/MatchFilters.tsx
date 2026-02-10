@@ -65,7 +65,6 @@ export function MatchFilters() {
             <div className="flex flex-wrap gap-2">
               {INTERESTS.map((interest) => (
                 <button
-                <button
                   key={interest}
                   className={cn(
                     "px-4 py-1.5 rounded-full text-xs font-medium transition-colors border",

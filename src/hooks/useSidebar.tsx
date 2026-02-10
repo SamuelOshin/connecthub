@@ -5,9 +5,12 @@ import { createContext, useContext, useState, useCallback, ReactNode } from "rea
 interface SidebarContextType {
   isCollapsed: boolean;
   isHovered: boolean;
+  isMobileOpen: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
   setIsHovered: (hovered: boolean) => void;
   toggle: () => void;
+  toggleMobile: () => void;
+  closeMobile: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -15,9 +18,18 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const toggle = useCallback(() => {
     setIsCollapsed((prev) => !prev);
+  }, []);
+
+  const toggleMobile = useCallback(() => {
+    setIsMobileOpen((prev) => !prev);
+  }, []);
+
+  const closeMobile = useCallback(() => {
+    setIsMobileOpen(false);
   }, []);
 
   return (
@@ -25,9 +37,12 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       value={{
         isCollapsed,
         isHovered,
+        isMobileOpen,
         setIsCollapsed,
         setIsHovered,
         toggle,
+        toggleMobile,
+        closeMobile,
       }}
     >
       {children}

@@ -1,228 +1,259 @@
-"use client";
+'use client';
 
-import {
-  User,
-  Lock,
-  Shield,
-  Bell,
-  CreditCard,
-  CheckCircle2,
-  EyeOff,
-  Ban,
-  ChevronRight,
-  Info,
-  Trash
-} from "lucide-react";
-import Link from "next/link";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useProfile } from '@/hooks/useProfile';
+import { useState, useEffect } from 'react';
 
-export default function SettingsPage() {
-  return (
-    <div className="overflow-y-auto h-full">
-      <div className="flex justify-center py-8 px-4 md:px-8">
-      <div className="flex w-full max-w-[1024px] gap-8 flex-col lg:flex-row">
-        {/* Settings Sidebar */}
-        <aside className="w-full lg:w-64 flex-shrink-0">
-          <div className="sticky top-24 flex flex-col gap-6 rounded-2xl bg-white p-5 shadow-sm border border-slate-200 dark:bg-[#1a2733] dark:border-slate-800">
-            <div className="flex gap-3 items-center pb-4 border-b border-slate-200 dark:border-slate-700">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-200"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDa8pL_9bw8XWG3GyNLv7nE4cZV7ZwsdABMi7QuP3lShY2xdsfAZzExWZ7YT1ifLq35DkP8GOPOM1fkpEh0xh7EByb9Es1spN3l0wP11n7ChQlR90tXVCZMMd9sF-Rj6g1KP2ny6Porb7uTNDKciboV1Y2jNq7dqNqVG3cooeAvvTZiANw-F5gFlk-RcSeuoEYAttmiIeTg1TUFPCMsqMy2c5BVP07bbv8XnewiLx3xfFyF78ceYmRO6Kra0zthKerZ87il4TktxyK3")' }}
-              ></div>
-              <div className="flex flex-col overflow-hidden">
-                <h1 className="text-[#101418] dark:text-white text-sm font-bold leading-normal truncate">Alex Morgan</h1>
-                <p className="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal truncate">alex.m@example.com</p>
-              </div>
-            </div>
-            <nav className="flex flex-col gap-1">
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <User className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-[#101418] dark:group-hover:text-white" />
-                <p className="text-[#101418] dark:text-white text-sm font-medium leading-normal">Account</p>
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <Lock className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-[#101418] dark:group-hover:text-white" />
-                <p className="text-[#101418] dark:text-white text-sm font-medium leading-normal">Privacy</p>
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-xl bg-primary/10 text-primary transition-colors">
-                <Shield className="w-5 h-5 fill-current" />
-                <p className="text-primary text-sm font-bold leading-normal">Safety Center</p>
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <Bell className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-[#101418] dark:group-hover:text-white" />
-                <p className="text-[#101418] dark:text-white text-sm font-medium leading-normal">Notifications</p>
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
-                <CreditCard className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-[#101418] dark:group-hover:text-white" />
-                <p className="text-[#101418] dark:text-white text-sm font-medium leading-normal">Billing</p>
-              </Link>
-            </nav>
-          </div>
-        </aside>
+export default function SafetyCenterPage() {
+    const { data: profile, updateProfile, isUsingMock } = useProfile();
 
-        {/* Main Settings Content */}
-        <main className="flex-1 flex flex-col gap-6 min-w-0">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-[#101418] dark:text-white text-[32px] font-bold leading-tight">Settings & Safety</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-base">Manage your account security, privacy preferences, and verification status.</p>
-          </div>
+    // Local state to allow optimistic immediate updates
+    const [privacy, setPrivacy] = useState({
+        incognito_mode: false,
+        active_status: true,
+        read_receipts: true,
+    });
 
-          {/* Get Verified Banner */}
-          <div className="@container">
-            <div className="flex flex-col items-stretch justify-start rounded-2xl @xl:flex-row @xl:items-center shadow-sm border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1a2733] overflow-hidden">
-              <div
-                className="w-full @xl:w-1/3 bg-center bg-no-repeat bg-cover h-48 @xl:h-full min-h-[180px]"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDHxJmOrOdkV_HYyAKpEcNahYH_gAcU_GbXFYR526EGdE-KcQuDd3H3stcI0smHn9y0rz7OTnYprJQy3iCG2cgqdbXtBLDySl6y07bxPw1MjukHJPdtm_u5MevSzo6rftaBpV91FTfSuJWRA9eKzC3fo_8chHNsYBynIND1NvfDFsN_8mkV-nBjxPeaFZVXYbUz5ajJYf_Gw9LKuX7TaalvSUm2StfKU6Lw4wBJISUs9SaqO4-CX05P0O51sYmiR28vZd5uAmoxXBD7")' }}
-              >
-                <div className="w-full h-full bg-primary/20 backdrop-blur-[2px]"></div>
-              </div>
-              <div className="flex w-full grow flex-col items-start justify-center gap-3 p-6">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="text-primary w-8 h-8" />
-                  <h3 className="text-[#101418] dark:text-white text-xl font-bold leading-tight">Get Verified</h3>
-                </div>
-                <p className="text-slate-500 dark:text-slate-300 text-base font-normal leading-normal">
-                  Verify your profile to get the Blue Badge and show others you&apos;re real. It increases your match rate by 30% and builds trust.
-                </p>
-                <button className="mt-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold leading-normal transition-colors shadow-lg shadow-primary/30">
-                  <span>Verify Identity Now</span>
-                </button>
-              </div>
-            </div>
-          </div>
+    const [notifications, setNotifications] = useState({
+        new_matches: true,
+        new_messages: true,
+        super_likes: true,
+        promotions: false,
+    });
 
-          {/* Privacy Controls */}
-          <div className="bg-white dark:bg-[#1a2733] rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-3 pb-4 mb-2 border-b border-slate-200 dark:border-slate-800">
-              <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-full text-purple-600 dark:text-purple-400">
-                <EyeOff className="w-6 h-6" />
-              </div>
-              <h2 className="text-[#101418] dark:text-white text-xl font-bold">Privacy Controls</h2>
-            </div>
-            <div className="flex flex-col divide-y divide-slate-200 dark:divide-slate-800">
-              <div className="flex flex-col md:flex-row md:items-center justify-between py-5 gap-4">
-                <div className="flex flex-col gap-1 max-w-2xl">
-                  <h3 className="text-base font-bold text-[#101418] dark:text-white">Incognito Mode</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Only people you have already liked can see your profile. You won&apos;t appear in the main discovery feed.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex flex-col md:flex-row md:items-center justify-between py-5 gap-4">
-                <div className="flex flex-col gap-1 max-w-2xl">
-                  <h3 className="text-base font-bold text-[#101418] dark:text-white">Active Status</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Allow matches to see when you were last active on ConnectHub.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex flex-col md:flex-row md:items-center justify-between py-5 gap-4">
-                <div className="flex flex-col gap-1 max-w-2xl">
-                  <h3 className="text-base font-bold text-[#101418] dark:text-white">Read Receipts</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Let matches know when you&apos;ve read their messages.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
-          </div>
+    useEffect(() => {
+        if (profile?.privacy_settings) {
+            setPrivacy(profile.privacy_settings);
+        }
+        if (profile?.notification_settings) {
+            setNotifications(profile.notification_settings);
+        }
+    }, [profile]);
 
-          {/* Safety & Blocking */}
-          <div className="bg-white dark:bg-[#1a2733] rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-3 pb-4 mb-2 border-b border-slate-200 dark:border-slate-800">
-              <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-full text-red-600 dark:text-red-400">
-                <Ban className="w-6 h-6" />
-              </div>
-              <h2 className="text-[#101418] dark:text-white text-xl font-bold">Safety & Blocking</h2>
-            </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between py-3">
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-base font-bold text-[#101418] dark:text-white">Blocked Contacts</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Manage the list of people you have blocked.</p>
-                </div>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-600 text-[#101418] dark:text-white font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                  <span>Manage List</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="rounded-xl bg-primary/5 border border-primary/10 p-4 flex gap-4 items-start">
-                <Info className="w-5 h-5 text-primary mt-1" />
+    const togglePrivacy = (key: keyof typeof privacy) => {
+        const newVal = !privacy[key];
+        const newSettings = { ...privacy, [key]: newVal };
+        setPrivacy(newSettings);
+        updateProfile({ privacy_settings: newSettings });
+    };
+
+    const toggleNotification = (key: keyof typeof notifications) => {
+        const newVal = !notifications[key];
+        const newSettings = { ...notifications, [key]: newVal };
+        setNotifications(newSettings);
+        updateProfile({ notification_settings: newSettings });
+    };
+
+    return (
+        <div className="p-4 sm:p-8 max-w-4xl mx-auto">
+            {/* Page Header */}
+            <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-sm font-bold text-[#101418] dark:text-white mb-1">Safety Tip</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Never share your financial information, social security number, or home address with someone you&apos;ve just met online.
-                    <Link href="#" className="text-primary font-medium hover:underline ml-1">Read our full Safety Guide</Link>.
-                  </p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                        Settings & Safety
+                    </h1>
+                    <p className="text-gray-500 text-sm sm:text-base">
+                        Manage your account security, privacy preferences, and verification status.
+                    </p>
                 </div>
-              </div>
+                {isUsingMock && (
+                    <span className="self-start sm:self-center px-3 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 text-xs font-bold rounded-full flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px]">offline_bolt</span>
+                        Offline
+                    </span>
+                )}
             </div>
-          </div>
 
-          {/* Notification Preferences */}
-          <div className="bg-white dark:bg-[#1a2733] rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-3 pb-4 mb-2 border-b border-slate-200 dark:border-slate-800">
-              <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-full text-orange-600 dark:text-orange-400">
-                <Bell className="w-6 h-6" />
-              </div>
-              <h2 className="text-[#101418] dark:text-white text-xl font-bold">Notification Preferences</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 pt-2">
-              <div className="flex items-center justify-between p-2">
-                <span className="text-base font-medium text-[#101418] dark:text-white">New Matches</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-2">
-                <span className="text-base font-medium text-[#101418] dark:text-white">New Messages</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-2">
-                <span className="text-base font-medium text-[#101418] dark:text-white">Super Likes</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-2">
-                <span className="text-base font-medium text-[#101418] dark:text-white">Promotions & Tips</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" />
-                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
-          </div>
+            {/* Get Verified Card */}
+            {!profile?.is_verified && (
+                <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-soft flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+                    <div className="size-16 sm:size-24 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-white text-3xl sm:text-5xl">verified_user</span>
+                    </div>
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="material-symbols-outlined text-primary text-[20px] icon-filled">verified</span>
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Get Verified</h2>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+                            Verify your profile to get the Blue Badge and show others you're real.
+                            It increases your match rate by 30% and builds trust.
+                        </p>
+                        <Button className="w-full sm:w-auto bg-primary hover:bg-blue-600 text-white rounded-xl px-6 h-11 sm:h-10">
+                            <span className="material-symbols-outlined text-[18px] mr-2">verified</span>
+                            Verify Identity Now
+                        </Button>
+                    </div>
+                </div>
+            )}
 
-          {/* Footer Actions */}
-          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 pb-10">
-            <div className="flex justify-end gap-4">
-              <button className="px-6 py-3 rounded-full font-bold text-sm text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                Cancel
-              </button>
-              <button className="px-8 py-3 rounded-full bg-primary hover:bg-blue-600 text-white font-bold text-sm shadow-lg shadow-primary/25 transition-all transform active:scale-95">
-                Save Changes
-              </button>
+            {/* Privacy Controls */}
+            <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-soft">
+                <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <span className="material-symbols-outlined text-gray-600 text-[22px]">visibility_off</span>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Privacy Controls</h2>
+                </div>
+
+                <div className="space-y-5">
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Incognito Mode</h3>
+                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                                Only people you have already liked can see your profile.
+                            </p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={privacy.incognito_mode}
+                                onChange={() => togglePrivacy('incognito_mode')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+
+                    <div className="border-t border-gray-100 dark:border-gray-800"></div>
+
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Active Status</h3>
+                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                                Show when you were last active.
+                            </p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={privacy.active_status}
+                                onChange={() => togglePrivacy('active_status')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+
+                    <div className="border-t border-gray-100 dark:border-gray-800"></div>
+
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Read Receipts</h3>
+                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                                Let matches know when you've read messages.
+                            </p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={privacy.read_receipts}
+                                onChange={() => togglePrivacy('read_receipts')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div className="mt-8">
-              <button className="flex items-center gap-2 text-red-500 hover:text-red-700 text-sm font-medium transition-colors">
-                <Trash className="w-5 h-5" />
-                Delete Account
-              </button>
+
+            {/* Safety & Blocking */}
+            <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 shadow-soft">
+                <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <span className="material-symbols-outlined text-red-500 text-[22px]">shield</span>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Safety & Blocking</h2>
+                </div>
+
+                <div className="flex items-center justify-between mb-4 gap-4">
+                    <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Blocked Contacts</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Manage blocked users.</p>
+                    </div>
+                    <Link href="/settings/blocked">
+                        <Button variant="outline" className="rounded-xl h-9 sm:h-10 text-xs sm:text-sm whitespace-nowrap">
+                            Manage List
+                            <span className="material-symbols-outlined text-[16px] sm:text-[18px] ml-1">chevron_right</span>
+                        </Button>
+                    </Link>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl p-4 flex gap-3">
+                    <span className="material-symbols-outlined text-primary text-[20px] shrink-0">info</span>
+                    <div>
+                        <h4 className="font-semibold text-gray-900 dark:text-white text-sm">Safety Tip</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
+                            Never share your financial information or home address with
+                            someone you've just met online. <Link href="/safety-guide" className="text-primary hover:underline">Read our Safety Guide.</Link>
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
-        </main>
-      </div>
-    </div>
-    </div>
-  );
+
+            {/* Notification Preferences */}
+            <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 sm:p-6 mb-8 shadow-soft">
+                <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <span className="material-symbols-outlined text-orange-500 text-[22px]">notifications</span>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Notification Preferences</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">New Matches</span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={notifications.new_matches}
+                                onChange={() => toggleNotification('new_matches')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">New Messages</span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={notifications.new_messages}
+                                onChange={() => toggleNotification('new_messages')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Super Like Alerts</span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={notifications.super_likes}
+                                onChange={() => toggleNotification('super_likes')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Promotions</span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={notifications.promotions}
+                                onChange={() => toggleNotification('promotions')}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-between pb-8">
+                <button className="text-red-500 hover:text-red-600 font-medium flex items-center gap-2 text-sm sm:text-base">
+                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                    Delete Account
+                </button>
+            </div>
+        </div>
+    );
 }

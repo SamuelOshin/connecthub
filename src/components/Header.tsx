@@ -1,9 +1,10 @@
 "use client";
 
-import { Users, Bell, Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { PulseLogo } from "@/components/brand/PulseLogo";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,8 +21,11 @@ export function Header() {
     <header className="w-full px-4 sm:px-10 py-4 z-50 fixed top-0 left-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
       <div className="mx-auto max-w-7xl flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-primary">
-          <Users className="w-9 h-9" />
-          <h2 className="text-[#101418] dark:text-white text-2xl font-bold tracking-tight">ConnectHub</h2>
+          <PulseLogo width={36} height={36} />
+          <h2 className="text-[#101418] dark:text-white text-2xl tracking-tight">
+            <span className="font-bold">Connect</span>
+            <span className="font-normal">Hub</span>
+          </h2>
         </Link>
 
         {/* Desktop Navigation */}

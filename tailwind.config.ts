@@ -10,15 +10,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Design System Colors
+        "primary": "#007bff",
+        "primary-dark": "#0056b3",
+        // Background colors
+        "background-light": "#f5f7f8",
+        "background-dark": "#0f1923",
+        // Surface colors (cards, sidebars)
+        "surface-light": "#ffffff",
+        "surface-dark": "#1a242f",
+        // Card colors
+        "card-light": "#ffffff",
+        "card-dark": "#1a242f",
+        // Text colors
+        "text-main": "#101418",
+        "text-secondary": "#5e758d",
+        // Legacy colors for compatibility
         "royal-blue": "#0066FF",
         "golden-amber": "#FFB020",
         "light-slate": "#F8FAFC",
-        "primary": "#0066FF",
-        "primary-dark": "#0052cc",
         "secondary": "#2d3748",
         "secondary-foreground": "#ffffff",
-        "background-light": "#f5f7f8",
-        "background-dark": "#0f1923",
         "brand-dark": "#0B1120",
         // Shadcn/ui like colors
         border: "hsl(var(--border))",
@@ -48,17 +60,23 @@ const config: Config = {
         },
       },
       fontFamily: {
-        "display": ["var(--font-display)", "Plus Jakarta Sans", "sans-serif"],
-        "sans": ["var(--font-body)", "sans-serif"],
-        "body": ["var(--font-body)", "sans-serif"],
+        "display": ["Plus Jakarta Sans", "var(--font-display)", "sans-serif"],
+        "sans": ["Plus Jakarta Sans", "var(--font-body)", "sans-serif"],
+        "body": ["Noto Sans", "var(--font-body)", "sans-serif"],
+        "serif": ["Playfair Display", "var(--font-serif)", "serif"],
       },
       borderRadius: {
-        "lg": "var(--radius)",
+        "DEFAULT": "1rem",
+        "lg": "1.5rem",
+        "xl": "2rem",
+        "2xl": "2.5rem",
+        "3xl": "3rem",
         "md": "calc(var(--radius) - 2px)",
         "sm": "calc(var(--radius) - 4px)",
-        "xl": "1rem",
-        "2xl": "1.5rem",
-        "3xl": "2rem",
+      },
+      boxShadow: {
+        "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+        "glow": "0 0 15px rgba(0, 123, 255, 0.3)",
       },
     },
   },
